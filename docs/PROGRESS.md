@@ -1,5 +1,94 @@
 # Progres pengembangan
 
+## Tahap 7: profil admin dan penyempurnaan antarmuka
+
+Status: selesai untuk kode pada 4 Oktober 2026. Akun dan data FAQ MySQL tidak diubah pada tahap ini.
+
+- Route profil admin ditambahkan untuk melihat dan memperbarui nama serta email, dengan formulir password yang terpisah. Semua route profil berada di balik middleware autentikasi dan perlindungan CSRF.
+- Validasi nama 100 karakter dan email unik mengabaikan akun sendiri. Email dinormalisasi, dan perubahan email mewajibkan password saat ini. Password baru minimal 12 karakter dengan konfirmasi yang cocok.
+- Password disimpan melalui cast hash Laravel. Setelah perubahan password, session aktif diregenerasi dan remember token dirotasi bila sebelumnya digunakan. Password tidak diisi kembali saat validasi gagal dan tidak ditampilkan di halaman.
+- Navigasi admin mobile kini dapat dibuka dan ditutup dengan elemen `details`. Link Profil tersedia pada desktop serta mobile; link lewati ke konten dan fokus keyboard yang jelas ditambahkan pada layout publik dan admin.
+- Pratinjau profil dengan data contoh diperiksa di browser pada desktop dan 320 piksel, tanpa gulir horizontal pada 320 piksel. Menu mobile diuji dengan sentuhan dan Enter, accordion publik diuji dengan Enter. Berkas pratinjau sementara sudah dihapus. Perangkat kiosk fisik belum diuji.
+- Seluruh 37 tes dan 271 assertion lulus. Pint, build Vite, dan `git diff --check` lulus. Tes baru mencakup pembatasan tamu, validasi nama dan email, password saat ini, email unik, hash, rotasi session dan remember token, serta tidak mem-flash password.
+
+Tahap berikutnya yang diusulkan: Tahap 8, reset publik 60 detik dan verifikasi fitur terkait. Pelaksanaan menunggu perintah pemilik proyek.
+
+### Audit desain Tahap 7
+
+Design read: profil untuk satu admin rumah sakit, dengan bahasa visual tenang, jelas, dan konsisten dengan panel FAQ.
+
+- Design variance 3: formulir memakai urutan linear agar mudah dipindai.
+- Motion intensity 2: transisi hanya memberi umpan balik fokus dan tindakan.
+- Visual density 4: dua tugas akun dipisahkan tanpa panel statistik.
+- Em-dash/en-dash audit: Pass, nol U+2014 dan U+2013 pada berkas antarmuka yang diubah.
+- Section-Layout-Repetition: Pass. Navigasi berupa rail atau menu lipat, pembuka tipografis, lalu dua formulir bertumpuk dengan pola field yang konsisten karena keduanya adalah tugas akun.
+- Hero discipline: Pass. Halaman profil tidak memiliki hero pemasaran; judul satu baris pada desktop dan 320 piksel, pengantar 11 kata, dan formulir pertama langsung mengikuti pembuka. Tombol submit berada setelah field sesuai alur formulir.
+
+Pre-Flight Check tasteskill Section 14, setiap kotak:
+
+1. Pass, brief inference: profil admin rumah sakit mengikuti tugas identitas akun dan keamanan password.
+2. Pass, dial values: variance 3, motion 2, density 4 dinyatakan di atas.
+3. Pass, design system: Blade dan Tailwind memakai token PRD tanpa sistem tambahan.
+4. Pass, redesign mode: layout admin yang ada diperluas tanpa mengganti bahasa visualnya.
+5. Pass, karakter dash: tidak ada U+2014 atau U+2013 pada UI yang diubah.
+6. Pass, page theme lock: profil dan layout tetap memakai tema terang.
+7. Pass, color consistency: hijau PRD tetap warna identitas dan tindakan.
+8. Pass, shape consistency: panel radius 16 piksel dan kontrol radius 12 piksel.
+9. Pass, button contrast: tindakan utama memakai teks putih pada hijau dengan rasio sekitar 6,3:1.
+10. Pass, CTA wrap: Simpan profil, Ubah password, dan Keluar satu baris pada desktop.
+11. Pass, form contrast: label gelap, input berbatas jelas, dan fokus hijau terbaca pada putih.
+12. Pass, serif discipline: tidak ada font serif.
+13. Pass, premium palette: tema memakai palet rumah sakit yang ditentukan PRD.
+14. Pass, italic clearance: tidak ada judul miring.
+15. Pass, hero viewport: tidak ada hero pemasaran; pembuka profil dan formulir pertama terlihat pada viewport awal.
+16. Pass, hero top padding: jarak atas pembuka sedang dan tidak menggeser judul ke bawah.
+17. Pass, hero stack: pembuka profil hanya judul dan satu pengantar.
+18. Pass, eyebrow count: profil tidak memakai eyebrow dekoratif.
+19. Pass, split-header ban: judul dan pengantar tersusun vertikal.
+20. Pass, zigzag cap: tidak ada pola gambar dan teks selang-seling.
+21. Pass, duplicate CTA: Simpan profil dan Ubah password mengirim dua formulir berbeda.
+22. Pass, logo wall: tidak ada deretan logo.
+23. Pass, bento diversity: tidak ada bento.
+24. Pass, trusted-by wall: tidak ada klaim atau logo pihak lain.
+25. Pass, copy audit: pesan validasi menyebut field yang benar tanpa klaim medis.
+26. Pass, motion motivated: transisi hanya menandai fokus dan interaksi.
+27. Pass, marquee: tidak ada marquee.
+28. Pass, navigation line: header desktop satu baris dan lebih rendah dari 80 piksel.
+29. Pass, section layout repetition: pola field berulang hanya karena dua formulir akun yang berbeda.
+30. Pass, bento rhythm: tidak ada sel bento atau sel kosong.
+31. Pass, long lists: tidak ada daftar panjang pada profil.
+32. Pass, real images: tidak ada gambar yang dibutuhkan untuk formulir akun; logo resmi belum diberikan.
+33. Pass, image overlays: tidak ada gambar atau label di atas gambar.
+34. Pass, photo credits: tidak ada foto dekoratif.
+35. Pass, version footer: tidak ada label versi.
+36. Pass, micro-meta: tidak ada kalimat dekoratif di bawah eyebrow.
+37. Pass, hero strip: tidak ada strip slogan.
+38. Pass, floating heading subtext: pengantar berada langsung di bawah judul.
+39. Pass, scoring bars: tidak ada batang penilaian.
+40. Pass, locale strips: tidak ada strip kota, cuaca, atau waktu.
+41. Pass, scroll cues: tidak ada petunjuk gulir dekoratif.
+42. Pass, hero version: tidak ada label versi.
+43. Pass, section numbering eyebrow: tidak ada penomoran dekoratif.
+44. Pass, decorative dots: tidak ada titik dekoratif.
+45. Pass, repeated row borders: formulir memakai pemisah tunggal sebelum tindakan.
+46. Pass, content density: hanya field yang diperlukan PRD yang ditampilkan.
+47. Pass, quotes: tidak ada kutipan.
+48. Pass, motion claimed: intensitas 2 sesuai perubahan warna kontrol yang ada.
+49. Pass, GSAP patterns: tidak ada GSAP atau efek gulir kompleks.
+50. Pass, scroll listener: tidak ada pendengar gulir pada tahap ini.
+51. Pass, reduced motion: CSS global mengurangi transisi saat diminta.
+52. Pass, dark mode: tema tunggal terang sesuai PRD dan theme lock.
+53. Pass, mobile collapse: formulir satu kolom, tombol selebar bidang, menu lipat, tanpa gulir horizontal pada 320 piksel.
+54. Pass, viewport stability: layout memakai `dvh`, bukan tinggi layar tetap.
+55. Pass, useEffect cleanup: Blade dan JavaScript ringan tidak memakai React.
+56. Pass, empty/loading/error: formulir kosong awal, galat dekat field, dan pesan sukses sesuai formulir tersedia.
+57. Pass, cards omitted: dua panel hanya memisahkan identitas akun dan password yang berisiko berbeda.
+58. Pass, icons: penanda menu memakai plus dan hyphen teks, tanpa SVG buatan.
+59. Pass, motion client leaf: tidak ada komponen animasi React.
+60. Pass, AI tells: tidak ada warna ungu, tiga kartu promosi, atau copy pemasaran.
+61. Pass, Core Web Vitals plausibility: aset lokal dan tanpa font atau gambar jaringan; metrik lapangan belum diukur.
+62. Pass, one design system: hanya Tailwind lokal dan token PRD yang dipakai.
+
 ## Tahap 6: halaman FAQ publik
 
 Status: selesai untuk kode pada 4 Oktober 2026. Data MySQL tidak diubah. Halaman hanya memuat FAQ aktif sesuai urutan global yang sudah tersimpan.

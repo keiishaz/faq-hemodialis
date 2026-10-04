@@ -7,6 +7,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-dvh bg-paper font-sans text-ink antialiased">
+        <a href="#konten-utama" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-hospital focus:px-4 focus:py-3 focus:font-semibold focus:text-white">Lewati ke konten utama</a>
         <div class="h-1 bg-hospital" aria-hidden="true"></div>
         <div class="flex min-h-[calc(100dvh-4px)] flex-col">
             <header class="border-b border-[#DDE5DF] bg-white">

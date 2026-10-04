@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminSessionController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FaqReorderController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\PublicFaqController;
 use App\Http\Middleware\PreventAdminCache;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,9 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
 
     Route::middleware(['auth', PreventAdminCache::class])->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
         Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
         Route::get('/faqs/create', [FaqController::class, 'create'])->name('faqs.create');
         Route::put('/faqs/reorder', FaqReorderController::class)->name('faqs.reorder');

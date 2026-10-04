@@ -12,6 +12,11 @@
     --color-ink: #26332F;
 }
 
+:where(a, button, input, textarea, select, summary, [contenteditable='true']):focus-visible {
+    outline: 3px solid #236B5D;
+    outline-offset: 3px;
+}
+
 .faq-editor p,
 .faq-content p {
     margin-block: 0.75rem;
