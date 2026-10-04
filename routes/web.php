@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminSessionController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FaqReorderController;
+use App\Http\Controllers\PublicFaqController;
 use App\Http\Middleware\PreventAdminCache;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PublicFaqController::class, 'index'])->name('public.index');
+Route::get('/faq/{faq:slug}', [PublicFaqController::class, 'show'])
+    ->missing(fn () => response()->view('public.not-found', [], 404))
+    ->name('public.faq.show');
 
 Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::middleware('guest')->group(function (): void {

@@ -30,10 +30,29 @@
 }
 
 .faq-editor a,
-.faq-content a {
+.faq-content a[href] {
     color: #236B5D;
     text-decoration: underline;
     overflow-wrap: anywhere;
+}
+
+.faq-content a[href] {
+    font-weight: 600;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.faq-content a[href]:focus-visible {
+    outline: 3px solid #236B5D;
+    outline-offset: 3px;
+}
+
+.faq-content p:first-child {
+    margin-top: 0;
+}
+
+.faq-content li + li {
+    margin-top: 0.35rem;
 }
 
 .faq-sort-item.is-dragging {

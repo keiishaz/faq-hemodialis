@@ -16,6 +16,68 @@ if (adminLoginForm) {
     });
 }
 
+const publicFaqList = document.querySelector('[data-public-faq-list]');
+
+if (publicFaqList) {
+    const searchInput = publicFaqList.querySelector('[data-faq-search]');
+    const clearButton = publicFaqList.querySelector('[data-search-clear]');
+    const emptyClearButton = publicFaqList.querySelector('[data-empty-search-clear]');
+    const itemsContainer = publicFaqList.querySelector('[data-faq-items]');
+    const noResults = publicFaqList.querySelector('[data-faq-no-results]');
+    const items = [...publicFaqList.querySelectorAll('[data-faq-item]')];
+
+    const closeAccordion = (item) => {
+        item.querySelector('[data-faq-toggle]').setAttribute('aria-expanded', 'false');
+        item.querySelector('[data-faq-panel]').hidden = true;
+        item.querySelector('[data-faq-indicator]').textContent = '+';
+    };
+
+    const updateSearch = () => {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+            closeAccordion(item);
+
+            const question = item.querySelector('[data-faq-question]').textContent;
+            const shortAnswer = item.querySelector('[data-faq-short-answer]').textContent;
+            const matches = `${question} ${shortAnswer}`.toLowerCase().includes(query);
+
+            item.hidden = !matches;
+            visibleCount += Number(matches);
+        });
+
+        clearButton.hidden = query === '' || visibleCount === 0;
+        noResults.hidden = visibleCount !== 0;
+        itemsContainer.hidden = visibleCount === 0;
+    };
+
+    const clearSearch = () => {
+        searchInput.value = '';
+        updateSearch();
+        searchInput.focus();
+    };
+
+    items.forEach((item) => {
+        item.querySelector('[data-faq-toggle]').addEventListener('click', () => {
+            const toggle = item.querySelector('[data-faq-toggle]');
+            const shouldOpen = toggle.getAttribute('aria-expanded') === 'false';
+
+            items.forEach(closeAccordion);
+
+            if (shouldOpen) {
+                toggle.setAttribute('aria-expanded', 'true');
+                item.querySelector('[data-faq-panel]').hidden = false;
+                item.querySelector('[data-faq-indicator]').textContent = '-';
+            }
+        });
+    });
+
+    searchInput.addEventListener('input', updateSearch);
+    clearButton.addEventListener('click', clearSearch);
+    emptyClearButton.addEventListener('click', clearSearch);
+}
+
 const faqForm = document.querySelector('[data-faq-form]');
 
 if (faqForm) {

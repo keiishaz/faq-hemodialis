@@ -1,5 +1,94 @@
 # Progres pengembangan
 
+## Tahap 6: halaman FAQ publik
+
+Status: selesai untuk kode pada 4 Oktober 2026. Data MySQL tidak diubah. Halaman hanya memuat FAQ aktif sesuai urutan global yang sudah tersimpan.
+
+- Route `/` menampilkan pencarian lokal pada pertanyaan dan jawaban singkat, accordion satu terbuka, keadaan kosong, serta disclaimer tetap. Pencarian mengabaikan huruf besar dan spasi tepi, mempertahankan urutan, dan menutup accordion saat berubah.
+- Route `/faq/{faq:slug}` menampilkan jawaban lengkap yang disanitasi lagi di server. FAQ nonaktif, slug tidak ada, dan jawaban lengkap kosong mendapat halaman 404 yang ramah. Pertanyaan dan jawaban singkat tetap di-escape.
+- Layout publik memakai palet PRD, identitas teks rumah sakit, aset Vite lokal, dan footer dari `config/hospital.php`. Kontak hanya tampil bila dikonfigurasi; tidak ada nomor yang ditebak.
+- UI diuji di browser pada desktop dan lebar 320 piksel. Accordion, tautan detail, pencarian huruf besar, keadaan tanpa hasil, tindakan hapus, serta lebar tanpa gulir horizontal diperiksa. Ukuran target sentuh pertanyaan 114 piksel dan input 61 piksel pada 320 piksel. Kiosk fisik belum diuji.
+- Seluruh 31 tes dan 222 assertion lulus, termasuk tes akses FAQ aktif, 404, sanitasi, disclaimer, dan keadaan kosong. Pint, build Vite, dan `git diff --check` lulus.
+- Satu FAQ aktif pada MySQL berisi teks percobaan pada jawaban singkat dan lengkap. Konten itu berasal dari data yang sudah ada, bukan ditambahkan tahap ini, dan perlu ditinjau pengelola sebelum dipakai pasien.
+
+Tahap berikutnya yang diusulkan: Tahap 7, profil admin dan penyempurnaan tampilan serta aksesibilitas. Timer reset publik 60 detik tetap pada Tahap 8. Pelaksanaan tahap berikutnya menunggu perintah pemilik proyek.
+
+### Audit desain Tahap 6
+
+Design read: FAQ publik untuk pasien dan keluarga, dengan bahasa visual hangat, tenang, lega, dan satu kolom yang mudah disentuh.
+
+- Design variance 3: urutan baca tetap dan sederhana.
+- Motion intensity 2: transisi warna hanya memberi umpan balik kontrol.
+- Visual density 4: pertanyaan besar, jawaban lega, dan pencarian jelas.
+- Em-dash/en-dash audit: Pass, nol U+2014 dan U+2013 dalam berkas antarmuka publik.
+- Section-Layout-Repetition: Pass. Header identitas berupa baris teks; pembuka berupa judul dan pengantar; pencarian berupa field berlabel; FAQ berupa accordion satu kolom; footer berupa bidang disclaimer.
+- Hero discipline: Pass. Judul desktop satu baris, judul pada 320 piksel dua baris, pengantar enam kata, dan kolom pencarian terlihat pada viewport awal desktop serta ponsel 320 x 640.
+
+Pre-Flight Check tasteskill Section 14, setiap kotak:
+
+1. Pass, brief inference: FAQ rumah sakit untuk pasien dan keluarga menjadi acuan tata letak.
+2. Pass, dial values: variance 3, motion 2, density 4 dijelaskan di atas.
+3. Pass, design system: Blade dan Tailwind memakai token PRD tanpa sistem tambahan.
+4. Pass, redesign mode: halaman default Laravel diganti pada route publik sesuai arah mockup yang disetujui.
+5. Pass, karakter dash: tidak ada U+2014 atau U+2013 pada antarmuka publik.
+6. Pass, page theme lock: seluruh halaman publik memakai tema terang.
+7. Pass, color consistency: hijau PRD konsisten sebagai warna tindakan dan identitas.
+8. Pass, shape consistency: bidang utama radius 16 piksel, kontrol radius 12 piksel.
+9. Pass, button contrast: tindakan utama putih pada hijau memiliki rasio sekitar 6,3:1.
+10. Pass, CTA wrap: label Lihat Selengkapnya, Kembali ke FAQ, dan Hapus pencarian tetap satu baris pada desktop.
+11. Pass, form contrast: input berbatas jelas, label gelap, placeholder terbaca, dan fokus hijau.
+12. Pass, serif discipline: tidak ada font serif.
+13. Pass, premium palette: warna mengikuti PRD rumah sakit, bukan palet premium konsumen.
+14. Pass, italic clearance: tidak ada judul miring.
+15. Pass, hero viewport: pembuka dan pencarian terlihat tanpa gulir pada desktop dan ponsel uji.
+16. Pass, hero top padding: jarak atas pembuka kurang dari 96 piksel.
+17. Pass, hero stack: pembuka hanya judul dan pengantar, diikuti fungsi pencarian.
+18. Pass, eyebrow count: tidak ada eyebrow dekoratif.
+19. Pass, split-header ban: judul dan pengantar ditumpuk dalam satu kolom.
+20. Pass, zigzag cap: tidak ada gambar dan teks selang-seling.
+21. Pass, duplicate CTA: pada hasil kosong hanya satu tindakan Hapus pencarian yang terlihat.
+22. Pass, logo wall: tidak ada deretan logo.
+23. Pass, bento diversity: tidak ada bento yang memerlukan variasi sel.
+24. Pass, trusted-by wall: tidak ada klaim atau logo pihak lain.
+25. Pass, copy audit: teks sesuai PRD; jawaban medis tidak dibuat dalam kode.
+26. Pass, motion motivated: perubahan warna hanya menandai fokus dan sentuhan.
+27. Pass, marquee: tidak ada marquee.
+28. Pass, navigation line: header desktop satu baris dengan tinggi 80 piksel.
+29. Pass, section layout repetition: identitas, pembuka, pencarian, accordion, dan footer memiliki fungsi serta susunan berbeda.
+30. Pass, bento rhythm: tidak ada bento atau sel kosong.
+31. Pass, long lists: FAQ menggunakan accordion, bukan daftar teks datar.
+32. Pass, real images: PRD melarang gambar jawaban dan logo resmi belum disediakan; identitas teks dipakai.
+33. Pass, image overlays: tidak ada gambar atau label di atas gambar.
+34. Pass, photo credits: tidak ada foto dekoratif.
+35. Pass, version footer: tidak ada label versi.
+36. Pass, micro-meta: tidak ada kalimat dekoratif di bawah eyebrow.
+37. Pass, hero strip: tidak ada strip slogan.
+38. Pass, floating heading subtext: pengantar berada langsung di bawah judul.
+39. Pass, scoring bars: tidak ada batang penilaian.
+40. Pass, locale strips: tidak ada strip kota, cuaca, atau waktu.
+41. Pass, scroll cues: tidak ada petunjuk gulir dekoratif.
+42. Pass, hero version: tidak ada label versi di pembuka.
+43. Pass, section numbering eyebrow: tidak ada nomor dekoratif.
+44. Pass, decorative dots: tidak ada titik dekoratif.
+45. Pass, repeated row borders: accordion memakai pemisah bawah tunggal.
+46. Pass, content density: pertanyaan satu kolom dan jawaban hanya muncul saat dibuka.
+47. Pass, quotes: tidak ada kutipan dekoratif.
+48. Pass, motion claimed: intensitas 2 sesuai transisi kontrol yang benar-benar ada.
+49. Pass, GSAP patterns: tidak ada GSAP atau efek gulir kompleks.
+50. Pass, scroll listener: belum ada timer atau pendengar gulir pada tahap ini.
+51. Pass, reduced motion: CSS global menekan transisi ketika diminta.
+52. Pass, dark mode: tema tunggal terang sesuai PRD dan theme lock.
+53. Pass, mobile collapse: halaman satu kolom pada 320 piksel dan tidak melebar.
+54. Pass, viewport stability: layout memakai `dvh`, bukan tinggi layar tetap.
+55. Pass, useEffect cleanup: Blade dan JavaScript ringan tidak memakai React.
+56. Pass, empty/loading/error: daftar kosong, hasil cari kosong, dan 404 memiliki pesan serta tindakan yang jelas.
+57. Pass, cards omitted: satu bidang accordion mengelompokkan FAQ tanpa grid kartu berulang.
+58. Pass, icons: tanda plus dan hyphen teks dipakai untuk keadaan accordion; tidak ada SVG buatan.
+59. Pass, motion client leaf: tidak ada komponen animasi React.
+60. Pass, AI tells: tidak ada tiga kartu promosi, warna ungu, atau section pemasaran.
+61. Pass, Core Web Vitals plausibility: aset lokal kecil tanpa font atau gambar jaringan; metrik lapangan belum diukur.
+62. Pass, one design system: hanya Tailwind lokal dan token PRD.
+
 ## Tahap 5: pengurutan FAQ dan dashboard
 
 Status: selesai untuk kode pada 4 Oktober 2026. Data FAQ MySQL tidak diubah pada tahap ini. Pemeriksaan baca saja menemukan sembilan FAQ, satu aktif, sehingga dashboard akan memakai data yang sudah ada.
