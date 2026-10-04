@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\FaqFullAnswerSanitizer;
+use App\FaqOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
 use App\Models\Faq;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class FaqController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, FaqOrder $order): View
     {
         $search = trim((string) $request->query('search', ''));
         $status = (string) $request->query('status', 'all');
@@ -25,7 +27,13 @@ class FaqController extends Controller
             ->ordered()
             ->get();
 
-        return view('admin.faqs.index', compact('faqs', 'search', 'status'));
+        return view('admin.faqs.index', [
+            'faqs' => $faqs,
+            'search' => $search,
+            'status' => $status,
+            'reorderEnabled' => $status === 'all' && $search === '' && $faqs->count() > 1,
+            'orderSnapshot' => $status === 'all' && $search === '' ? $order->snapshot($faqs) : null,
+        ]);
     }
 
     public function create(): View
@@ -85,7 +93,18 @@ class FaqController extends Controller
 
     public function destroy(Faq $faq): RedirectResponse
     {
-        $faq->delete();
+        DB::transaction(function () use ($faq): void {
+            $faqs = Faq::query()->ordered()->lockForUpdate()->get();
+            $faq->delete();
+
+            $position = 1;
+            foreach ($faqs as $record) {
+                if ($record->id !== $faq->id) {
+                    DB::table('faqs')->where('id', $record->id)->update(['sort_order' => $position]);
+                    $position++;
+                }
+            }
+        });
 
         return to_route('admin.faqs.index')->with('status', 'FAQ berhasil dihapus permanen.');
     }

@@ -122,3 +122,144 @@ if (deleteDialog) {
 
     deleteDialog.querySelector('[data-delete-cancel]').addEventListener('click', () => deleteDialog.close());
 }
+
+const reorderList = document.querySelector('[data-reorder-list][data-reorder-url]');
+
+if (reorderList) {
+    const handles = [...reorderList.querySelectorAll('[data-sort-handle]')];
+    const feedback = document.querySelector('[data-reorder-feedback]');
+    const reloadButton = document.querySelector('[data-reorder-reload]');
+    let saving = false;
+    let drag = null;
+
+    const items = () => [...reorderList.querySelectorAll('[data-sort-item]')];
+    const currentIds = () => items().map((item) => Number(item.dataset.sortId));
+
+    const restoreOrder = (ids) => {
+        const byId = new Map(items().map((item) => [Number(item.dataset.sortId), item]));
+        ids.forEach((id) => reorderList.appendChild(byId.get(id)));
+    };
+
+    const setSaving = (value) => {
+        saving = value;
+        reorderList.setAttribute('aria-busy', String(value));
+        handles.forEach((handle) => { handle.disabled = value; });
+    };
+
+    const saveOrder = async (previousIds) => {
+        const ids = currentIds();
+        if (ids.every((id, index) => id === previousIds[index])) {
+            return;
+        }
+
+        setSaving(true);
+        feedback.textContent = 'Menyimpan urutan...';
+        reloadButton.hidden = true;
+
+        try {
+            const response = await fetch(reorderList.dataset.reorderUrl, {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': reorderList.dataset.reorderToken,
+                },
+                body: JSON.stringify({ ids, snapshot: reorderList.dataset.reorderSnapshot }),
+            });
+
+            if (response.status === 401 || response.status === 419) {
+                window.location.assign(reorderList.dataset.loginUrl);
+                return;
+            }
+
+            if (!response.ok) {
+                if (response.status === 409) {
+                    throw new Error('Daftar FAQ berubah. Muat ulang sebelum mengurutkan.');
+                }
+
+                throw new Error('Urutan gagal disimpan. Posisi dikembalikan.');
+            }
+
+            const result = await response.json();
+            reorderList.dataset.reorderSnapshot = result.snapshot;
+            feedback.textContent = 'Urutan FAQ tersimpan.';
+        } catch (error) {
+            restoreOrder(previousIds);
+            feedback.textContent = error.message;
+            reloadButton.hidden = false;
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    reloadButton.addEventListener('click', () => window.location.reload());
+
+    handles.forEach((handle) => {
+        const item = handle.closest('[data-sort-item]');
+
+        handle.addEventListener('keydown', (event) => {
+            if (saving || !['ArrowUp', 'ArrowDown'].includes(event.key)) {
+                return;
+            }
+
+            event.preventDefault();
+            const neighbor = event.key === 'ArrowUp' ? item.previousElementSibling : item.nextElementSibling;
+            if (!neighbor) {
+                return;
+            }
+
+            const previousIds = currentIds();
+            reorderList.insertBefore(item, event.key === 'ArrowUp' ? neighbor : neighbor.nextElementSibling);
+            saveOrder(previousIds);
+        });
+
+        handle.addEventListener('pointerdown', (event) => {
+            if (saving || event.button !== 0 || !event.isPrimary) {
+                return;
+            }
+
+            handle.focus();
+            handle.setPointerCapture(event.pointerId);
+            drag = { item, target: null, after: false, previousIds: currentIds() };
+            item.classList.add('is-dragging');
+            event.preventDefault();
+        });
+
+        handle.addEventListener('pointermove', (event) => {
+            if (!drag || !handle.hasPointerCapture(event.pointerId)) {
+                return;
+            }
+
+            const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-sort-item]');
+            items().forEach((candidate) => candidate.classList.remove('is-drop-target'));
+
+            if (target && target !== item && reorderList.contains(target)) {
+                drag.target = target;
+                drag.after = event.clientY >= target.getBoundingClientRect().top + target.getBoundingClientRect().height / 2;
+                target.classList.add('is-drop-target');
+            } else {
+                drag.target = null;
+            }
+        });
+
+        const endDrag = (commit) => {
+            if (!drag) {
+                return;
+            }
+
+            const { target, after, previousIds } = drag;
+            item.classList.remove('is-dragging');
+            items().forEach((candidate) => candidate.classList.remove('is-drop-target'));
+            drag = null;
+
+            if (commit && target) {
+                reorderList.insertBefore(item, after ? target.nextElementSibling : target);
+                saveOrder(previousIds);
+            }
+        };
+
+        handle.addEventListener('pointerup', () => endDrag(true));
+        handle.addEventListener('pointercancel', () => endDrag(false));
+    });
+}

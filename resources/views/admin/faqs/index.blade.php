@@ -33,17 +33,36 @@
         </nav>
     </div>
 
-    <div class="mt-6 space-y-3">
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-2 text-sm">
+        <p id="reorder-help" class="text-[#52615B]">
+            @if ($reorderEnabled)
+                Geser tombol Pindah, atau fokuskan lalu tekan panah atas atau bawah untuk mengubah urutan.
+            @elseif ($status !== 'all' || $search !== '')
+                Pengurutan tersedia pada tab Semua saat pencarian kosong.
+            @else
+                Tambahkan FAQ lain untuk mengatur urutan.
+            @endif
+        </p>
+        <div class="flex items-center gap-3">
+            <p data-reorder-feedback role="status" aria-live="polite" class="font-semibold text-hospital-deep"></p>
+            <button type="button" data-reorder-reload hidden class="min-h-12 font-semibold text-hospital-deep underline">Muat ulang daftar</button>
+        </div>
+    </div>
+
+    <div data-reorder-list @if ($reorderEnabled) data-reorder-url="{{ route('admin.faqs.reorder') }}" data-reorder-snapshot="{{ $orderSnapshot }}" data-reorder-token="{{ csrf_token() }}" data-login-url="{{ route('admin.login') }}" @endif class="mt-3 space-y-3">
         @forelse ($faqs as $faq)
-            <article class="rounded-2xl border border-[#D9E4DD] bg-white p-5 sm:p-6">
+            <article data-sort-item data-sort-id="{{ $faq->id }}" class="faq-sort-item rounded-2xl border border-[#D9E4DD] bg-white p-5 sm:p-6">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div class="min-w-0">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <span class="rounded-full px-3 py-1 text-xs font-bold {{ $faq->is_active ? 'bg-sage text-hospital-deep' : 'bg-[#EEEDE8] text-[#52615B]' }}">{{ $faq->is_active ? 'Aktif' : 'Nonaktif' }}</span>
-                            <span class="text-sm text-[#52615B]">Diperbarui {{ $faq->updated_at->locale('id')->translatedFormat('d M Y, H:i') }}</span>
+                    <div class="flex min-w-0 items-start gap-4">
+                        <button type="button" data-sort-handle @disabled(! $reorderEnabled) aria-label="Pindahkan FAQ: {{ $faq->question }}" aria-describedby="reorder-help" class="min-h-12 shrink-0 touch-none rounded-lg border border-[#627B6F] px-3 text-sm font-semibold text-hospital-deep hover:bg-sage focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital disabled:cursor-not-allowed disabled:opacity-50">Pindah</button>
+                        <div class="min-w-0">
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="rounded-full px-3 py-1 text-xs font-bold {{ $faq->is_active ? 'bg-sage text-hospital-deep' : 'bg-[#EEEDE8] text-[#52615B]' }}">{{ $faq->is_active ? 'Aktif' : 'Nonaktif' }}</span>
+                                <span class="text-sm text-[#52615B]">Diperbarui {{ $faq->updated_at->locale('id')->translatedFormat('d M Y, H:i') }}</span>
+                            </div>
+                            <h2 class="mt-3 text-lg font-bold leading-snug text-ink">{{ $faq->question }}</h2>
+                            <p class="mt-2 line-clamp-2 whitespace-pre-line text-sm leading-relaxed text-[#52615B]">{{ $faq->short_answer }}</p>
                         </div>
-                        <h2 class="mt-3 text-lg font-bold leading-snug text-ink">{{ $faq->question }}</h2>
-                        <p class="mt-2 line-clamp-2 whitespace-pre-line text-sm leading-relaxed text-[#52615B]">{{ $faq->short_answer }}</p>
                     </div>
                     <div class="flex shrink-0 flex-wrap gap-2">
                         <a href="{{ route('admin.faqs.edit', $faq) }}" class="inline-flex min-h-11 items-center rounded-lg border border-hospital px-3 text-sm font-semibold text-hospital-deep hover:bg-sage focus-visible:outline-3 focus-visible:outline-hospital">Edit</a>

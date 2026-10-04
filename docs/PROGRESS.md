@@ -1,5 +1,93 @@
 # Progres pengembangan
 
+## Tahap 5: pengurutan FAQ dan dashboard
+
+Status: selesai untuk kode pada 4 Oktober 2026. Data FAQ MySQL tidak diubah pada tahap ini. Pemeriksaan baca saja menemukan sembilan FAQ, satu aktif, sehingga dashboard akan memakai data yang sudah ada.
+
+- Halaman dashboard menampilkan Total FAQ, FAQ Aktif, FAQ Nonaktif, tombol Tambah FAQ, dan maksimal lima FAQ terbaru diperbarui dengan status, waktu, serta tindakan Edit. Keadaan tanpa FAQ juga memiliki tindakan Tambah FAQ.
+- Daftar FAQ mendapat tombol Pindah pada setiap record. Pada tab Semua tanpa pencarian, urutan dapat diubah melalui pointer pada mouse atau layar sentuh dan tombol panah atas/bawah pada keyboard. Pada daftar terfilter, tombol nonaktif dan alasan ditampilkan.
+- Endpoint `PUT /admin/faqs/reorder` menerima seluruh ID dalam urutan baru dan snapshot daftar. Validasi menolak ID duplikat atau bukan bilangan bulat; server menolak himpunan ID atau snapshot yang sudah tidak cocok dan meminta pemuatan ulang.
+- Penyimpanan urutan memakai transaksi dan kunci baris, lalu menulis `sort_order` berurutan mulai 1 tanpa mengubah waktu pembaruan konten. Jika respons gagal, tampilan kembali ke urutan sebelumnya dan menampilkan pesan. Penghapusan FAQ kini merapikan sisa urutan dalam transaksi.
+- Tidak ada dependensi baru. Seluruh 28 tes dan 187 assertion lulus; Pint, build Vite, dan `git diff --check` lulus. Tes mencakup urutan aktif dan nonaktif, input invalid, konflik data, rollback saat penyimpanan gagal, filter, penghapusan, angka dashboard, serta lima perubahan terakhir. Interaksi pointer dan keyboard pada perangkat fisik belum diuji di browser.
+
+Tahap berikutnya yang diusulkan: Tahap 6, halaman publik dengan pencarian, accordion, detail, dan disclaimer sesuai mockup yang telah disetujui. Pelaksanaan menunggu perintah pemilik proyek.
+
+### Audit desain Tahap 5
+
+Design read: dashboard dan daftar kerja untuk satu admin rumah sakit, dengan bahasa visual tenang, ringkas, dan konsisten dengan antarmuka FAQ yang telah dibuat.
+
+- Design variance 3: struktur tetap dan prioritas tugas jelas.
+- Motion intensity 2: gerakan hanya mengikuti pengurutan dan umpan balik kontrol.
+- Visual density 4: tiga angka ringkasan dan lima perubahan terakhir mudah dipindai.
+- Em-dash/en-dash audit: Pass, nol U+2014 dan U+2013 pada berkas UI yang diubah.
+- Section-Layout-Repetition: Pass. Dashboard memakai pembuka, strip tiga angka dalam satu bidang, dan daftar perubahan terbaru. Halaman FAQ memakai pembuka, panel cari dan filter, lalu daftar kartu administratif.
+- Hero discipline: Pass, kedua halaman adalah panel kerja tanpa hero pemasaran; judul satu baris pada desktop, pengantar dashboard singkat, dan tindakan utama berada di pembuka saat ada data.
+
+Pre-Flight Check tasteskill Section 14, setiap kotak:
+
+1. Pass, brief inference: panel admin FAQ rumah sakit mengikuti tugas pengelolaan aktual.
+2. Pass, dial values: variance 3, motion 2, density 4 dinyatakan di atas.
+3. Pass, design system: Blade dan Tailwind memakai token warna PRD yang sama.
+4. Pass, redesign mode: kerangka Tahap 4 diperiksa dan diperluas tanpa mengganti pola navigasi.
+5. Pass, karakter dash: tidak ada U+2014 atau U+2013 pada UI Tahap 5.
+6. Pass, page theme lock: dashboard dan daftar memakai tema terang.
+7. Pass, color consistency: hijau PRD tetap aksen utama, merah hanya untuk galat dan hapus.
+8. Pass, shape consistency: bidang radius 16 piksel dan kontrol radius 12 piksel.
+9. Pass, button contrast: tindakan utama memakai putih pada hijau gelap dan tombol sekunder berteks hijau gelap.
+10. Pass, CTA wrap: label Tambah FAQ, Edit, dan Pindah singkat pada desktop.
+11. Pass, form contrast: kolom cari mempertahankan batas dan fokus yang jelas.
+12. Pass, serif discipline: tidak ada font serif.
+13. Pass, premium palette: konteks rumah sakit memakai palet PRD, bukan palet konsumen premium.
+14. Pass, italic clearance: tidak ada judul miring.
+15. Pass, hero viewport: tidak ada hero; tindakan utama berada dekat judul panel.
+16. Pass, hero top padding: pembuka panel tidak didorong jauh ke bawah viewport.
+17. Pass, hero stack: pembuka dashboard hanya eyebrow, judul, pengantar, dan tindakan utama.
+18. Pass, eyebrow count: satu eyebrow pada pembuka tiap halaman.
+19. Pass, split-header ban: judul dan pengantar tersusun vertikal.
+20. Pass, zigzag cap: tidak ada gambar dan teks zigzag.
+21. Pass, duplicate CTA: Tambah FAQ dan Lihat semua FAQ memiliki tujuan berbeda; pada keadaan kosong hanya ada satu tindakan tambah.
+22. Pass, logo wall: tidak ada deretan logo.
+23. Pass, bento diversity: ringkasan memakai satu bidang informatif, bukan bento dekoratif.
+24. Pass, trusted-by wall: tidak ada klaim atau logo pihak lain.
+25. Pass, copy audit: label urut, status, dan pesan gagal jelas serta tidak mengarang informasi medis.
+26. Pass, motion motivated: perpindahan dan penanda target menunjukkan aksi urut.
+27. Pass, marquee: tidak ada marquee.
+28. Pass, navigation line: header desktop tetap satu baris.
+29. Pass, section layout repetition: pembuka, angka ringkas, daftar terbaru, filter, dan kartu memiliki tugas serta komposisi berbeda.
+30. Pass, bento rhythm: tidak ada bento atau sel kosong.
+31. Pass, long lists: FAQ memakai kartu sesuai PRD; dashboard membatasi daftar terbaru menjadi lima.
+32. Pass, real images: tidak ada gambar jawaban atau dekorasi yang diperlukan untuk panel kerja.
+33. Pass, image overlays: tidak ada gambar berlabel.
+34. Pass, photo credits: tidak ada foto dekoratif.
+35. Pass, version footer: tidak ada label versi.
+36. Pass, micro-meta: tidak ada kalimat dekoratif di bawah eyebrow.
+37. Pass, hero strip: tidak ada strip slogan.
+38. Pass, floating heading subtext: tidak ada teks mengambang di sisi judul.
+39. Pass, scoring bars: angka FAQ bukan batang penilaian.
+40. Pass, locale strips: tidak ada strip kota, cuaca, atau jam.
+41. Pass, scroll cues: tidak ada petunjuk gulir dekoratif.
+42. Pass, hero version: tidak ada label versi.
+43. Pass, section numbering eyebrow: tidak ada nomor bagian dekoratif.
+44. Pass, decorative dots: tidak ada titik dekoratif.
+45. Pass, repeated row borders: daftar terbaru memakai pemisah tunggal di dalam satu bidang.
+46. Pass, content density: tiga angka dan lima record terbaru sesuai kebutuhan dashboard PRD.
+47. Pass, quotes: tidak ada kutipan.
+48. Pass, motion claimed: intensitas 2 sesuai penanda drag dan transisi ringan.
+49. Pass, GSAP patterns: tidak ada GSAP atau animasi gulir kompleks.
+50. Pass, scroll listener: tidak ada pendengar acara gulir.
+51. Pass, reduced motion: aturan CSS global menekan transisi ketika diminta.
+52. Pass, dark mode: tema tunggal terang sesuai theme lock; mode gelap tidak diminta.
+53. Pass, mobile collapse: ringkasan menumpuk dan tindakan pada kartu membungkus.
+54. Pass, viewport stability: layout menggunakan `dvh`, tanpa tinggi layar tetap.
+55. Pass, useEffect cleanup: aplikasi Blade tidak memakai React atau `useEffect`.
+56. Pass, empty/loading/error: dashboard kosong, proses menyimpan urutan, konflik, dan gagal jaringan mempunyai respons.
+57. Pass, cards omitted: dashboard memakai satu strip ringkasan dan satu daftar; kartu FAQ tetap dipakai sesuai PRD.
+58. Pass, icons: tombol Pindah memakai teks, tanpa ikon campuran atau SVG buatan.
+59. Pass, motion client leaf: tidak ada komponen animasi React.
+60. Pass, AI tells: tidak ada tiga kartu promosi, warna ungu, atau bagian pemasaran.
+61. Pass, Core Web Vitals plausibility: aset lokal kecil dan tanpa gambar jaringan; metrik lapangan belum diukur.
+62. Pass, one design system: hanya token PRD dan Tailwind lokal yang digunakan.
+
 ## Tambahan setelah Tahap 4: seeder admin
 
 Status: selesai pada 4 Oktober 2026 atas permintaan pemilik proyek. Ini adalah tambahan khusus untuk akun admin, bukan pelaksanaan Tahap 5.

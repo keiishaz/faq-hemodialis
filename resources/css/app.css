@@ -36,6 +36,16 @@
     overflow-wrap: anywhere;
 }
 
+.faq-sort-item.is-dragging {
+    border-color: #236B5D;
+    background: #F0F8F3;
+}
+
+.faq-sort-item.is-drop-target {
+    outline: 3px solid #A9D1BE;
+    outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
