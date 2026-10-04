@@ -1,5 +1,17 @@
 # Progres pengembangan
 
+## Koreksi skala dan penyempurnaan FAQ publik
+
+Status: selesai pada 5 Oktober 2026. Header, hero, pencarian, accordion, detail, dan keadaan 404 diperkecil untuk ponsel serta desktop biasa. Viewport minimal 1600 piksel lebar dan 900 piksel tinggi memakai ukuran kiosk yang lebih lapang. Footer bernuansa biru sangat muda memuat alamat Jl. Bhayangkara, Kota Bengkulu dan nomor (0736) 52004 dari [profil RS Kementerian Kesehatan](https://sirs.kemkes.go.id/fo/home/profile_rs/1771014); nilai `HOSPITAL_CONTACT` tetap dapat mengganti nomor yang tampil. Disclaimer asli tetap utuh.
+
+- Dua lingkaran pada latar biru bergerak perlahan ke arah berlawanan dengan transformasi dan opasitas CSS. Keduanya berjalan dalam siklus 16 dan 20 detik sehingga geraknya tampak tetapi tidak mengganggu bacaan. Teks hero dan panel pencarian masuk sekali secara singkat; jawaban accordion muncul dengan transisi singkat. `prefers-reduced-motion` menonaktifkan semua animasi. Tidak ada loop JavaScript, dependensi, atau perubahan perilaku pencarian dan reset kiosk.
+- Pertanyaan FAQ kini berada dalam satu panel dengan pemisah tipis, teks berbobot 600 tanpa perubahan ukuran, ikon tanya kecil di kiri, tombol plus berbentuk lingkaran di kanan, dan garis biru yang menandai jawaban terbuka. Hasil pencarian kosong menjadi baris ringkas pada desktop dan susunan vertikal pada ponsel; panel FAQ yang tidak memiliki baris terlihat disembunyikan. Footer menyusun identitas RS, kontak, dan disclaimer pada bidang biru muda yang tenang.
+- Pemeriksaan browser pada 320 piksel, desktop biasa, 1920 x 800, dan kiosk 1920 x 1080 menunjukkan breakpoint besar hanya aktif pada viewport lebar sekaligus tinggi. Pada 320 piksel lebar dokumen 305 piksel untuk viewport 320 piksel; input pencarian 49 piksel dan tombol accordion minimal 76 piksel. Pada kiosk judul 64 piksel dan kontainer FAQ 1120 piksel; ukuran teks pertanyaan tetap 21 piksel. Detail, footer, hasil pencarian kosong, dan accordion terbuka diperiksa. Animasi lingkaran terkonfirmasi aktif pada CSS dengan durasi 16 detik.
+- `npm run build`, 38 tes dengan 278 assertion sebelum penyempurnaan baris hasil kosong, lalu empat tes publik dengan 42 assertion setelahnya, `git diff --check`, dan audit karakter em-dash/en-dash lulus. Tidak ada perubahan pada rute, JavaScript, controller, model, validasi, database, atau data MySQL.
+- Section-Layout-Repetition: Pass. Hero memperkenalkan topik, panel pencarian menjalankan tugas pencarian, panel accordion menampilkan FAQ sebagai daftar berpemisah, dan footer memuat identitas, kontak, serta disclaimer.
+- Hero discipline: Pass. Judul satu baris pada desktop/kiosk dan paling banyak dua baris pada ponsel; pengantar enam kata dan pencarian terlihat pada viewport awal. Gerak teks hanya sekali saat halaman masuk.
+- Pre-Flight Check Section 14: 62 butir audit bernomor pada bagian redesign di bawah tetap Pass setelah skala publik, footer, dan animasi ini diperiksa; butir hero, navigasi, gambar, gerak, konten, dan reduced motion telah dinilai ulang.
+
 ## Redesign visual setelah Tahap 9
 
 Status: penyesuaian admin terakhir selesai pada 5 Oktober 2026. Redesign mengikuti prompt tasteskill dan PDF referensi terbaru untuk 12 keadaan publik serta admin, dengan pengecualian login dua sisi sesuai permintaan langsung pemilik proyek. Palet biru dan sian menggantikan palet hijau rancangan sebelumnya. Logo resmi PNG disalin utuh dan dipakai konsisten pada layout publik, login, serta layout admin.
@@ -61,7 +73,7 @@ Pre-Flight Check tasteskill Section 14, setiap kotak:
 13. Pass: larangan palet premium konsumen tidak relevan untuk rumah sakit dan tidak dipakai.
 14. Pass: tidak ada judul display miring yang dapat terpotong.
 15. Pass: judul publik paling banyak dua baris, pengantar enam kata, dan pencarian terlihat di awal.
-16. Pass: jarak atas hero publik maksimal 72 piksel pada desktop.
+16. Pass: jarak atas hero publik 48 piksel pada desktop biasa dan 76 piksel pada kiosk tinggi untuk menjaga pencarian tetap terlihat di viewport awal.
 17. Pass: hero publik hanya berisi judul dan pengantar.
 18. Pass: tidak ada eyebrow dekoratif berulang di atas judul section.
 19. Pass: tidak ada pola judul besar kiri dengan penjelasan kecil di kanan.

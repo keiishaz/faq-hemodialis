@@ -22,7 +22,6 @@ let resetPublicFaqList = null;
 if (publicFaqList) {
     const searchInput = publicFaqList.querySelector('[data-faq-search]');
     const clearButton = publicFaqList.querySelector('[data-search-clear]');
-    const emptyClearButton = publicFaqList.querySelector('[data-empty-search-clear]');
     const itemsContainer = publicFaqList.querySelector('[data-faq-items]');
     const noResults = publicFaqList.querySelector('[data-faq-no-results]');
     const items = [...publicFaqList.querySelectorAll('[data-faq-item]')];
@@ -48,7 +47,7 @@ if (publicFaqList) {
             visibleCount += Number(matches);
         });
 
-        clearButton.hidden = query === '' || visibleCount === 0;
+        clearButton.hidden = searchInput.value.length === 0;
         noResults.hidden = visibleCount !== 0;
         itemsContainer.hidden = visibleCount === 0;
     };
@@ -81,7 +80,6 @@ if (publicFaqList) {
 
     searchInput.addEventListener('input', updateSearch);
     clearButton.addEventListener('click', clearSearch);
-    emptyClearButton.addEventListener('click', clearSearch);
 }
 
 const publicPage = document.querySelector('[data-public-page]');
