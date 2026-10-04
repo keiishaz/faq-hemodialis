@@ -1,5 +1,106 @@
 # Progres pengembangan
 
+## Tambahan setelah Tahap 4: seeder admin
+
+Status: selesai pada 4 Oktober 2026 atas permintaan pemilik proyek. Ini adalah tambahan khusus untuk akun admin, bukan pelaksanaan Tahap 5.
+
+- `AdminSeeder` baru membuat satu record pada tabel `users` dengan email dan password awal tetap di source code sesuai instruksi terbaru pemilik proyek. Password disimpan sebagai hash oleh Laravel.
+- `DatabaseSeeder` memanggil `AdminSeeder` lalu `FaqSeeder`. Menjalankan seeder ulang tidak mengganti nama, email, atau password akun yang sudah ada dan tidak menambah admin kedua.
+- `php artisan db:seed --class=AdminSeeder` telah dijalankan pada MySQL `faq_hemodialis`. Pemeriksaan baca saja mengonfirmasi satu akun admin. Seeder FAQ tidak dijalankan pada MySQL dalam tambahan ini.
+- Tes seeder memeriksa hash password, satu akun, perilaku saat diulang, dan integrasi `DatabaseSeeder`. Kredensial lengkap tidak dicatat di dokumen progres.
+
+Tahap berikutnya yang diusulkan tetap Tahap 5: pengurutan persisten dan ringkasan dashboard. Pelaksanaan menunggu perintah pemilik proyek.
+
+## Tahap 4: pengelolaan FAQ
+
+Status: selesai untuk kode pada 4 Oktober 2026. Penggunaan lewat login admin di MySQL belum dapat diperiksa langsung karena tabel `users` masih kosong; tes fitur menggunakan pengguna sementara pada database tes.
+
+- Daftar FAQ admin kini memiliki pencarian pertanyaan, filter Semua/Aktif/Nonaktif, badge status, waktu pembaruan, dan tindakan Edit, Pratinjau, Aktifkan/Nonaktifkan, serta Hapus Permanen dengan dialog konfirmasi.
+- Form tambah dan edit memvalidasi pertanyaan, jawaban singkat, jawaban lengkap, serta status. Input yang gagal tetap tampil; perubahan yang belum disimpan meminta konfirmasi saat Batal atau keluar halaman. Simpan menampilkan keadaan proses.
+- Editor jawaban lengkap mendukung paragraf, tebal, miring, daftar poin, daftar nomor, dan tautan. Sanitasi server menggunakan `symfony/html-sanitizer` versi 7.4 dengan elemen dan skema tautan terbatas. Jawaban yang kosong setelah sanitasi menjadi NULL. Pertanyaan dan jawaban singkat di-escape saat tampil.
+- Slug dibuat unik saat FAQ baru disimpan, dengan fallback, dan tidak berubah saat diedit. FAQ baru ditempatkan di akhir urutan; perubahan status tidak mengubah urutan. Pratinjau admin dapat membuka FAQ nonaktif. Route mutasi dilindungi autentikasi dan CSRF.
+- FAQ yang telah hilang dari tab lain mengarahkan admin ke daftar dengan pesan terkendali. Hapus permanen memakai DELETE. Pengurutan drag dan ringkasan dashboard tetap lingkup Tahap 5.
+- MySQL `faq_hemodialis` telah dimigrasi pemilik proyek dan skemanya terverifikasi. Migration tidak dijalankan oleh AI pada MySQL. Seeder admin belum dibuat dan tabel `users` masih kosong.
+- Pemeriksaan: 16 tes dan 132 assertion lulus, Pint lulus, build Vite lulus, Composer valid dan tidak melaporkan advisory, route admin terdaftar. Belum ada uji perangkat kiosk fisik atau inspeksi visual admin yang masuk ke MySQL.
+
+Tahap berikutnya yang diusulkan: Tahap 5, pengurutan persisten dan dashboard. Alasannya, data FAQ serta tindakan admin kini tersedia sebagai dasar untuk kedua fitur tersebut. Pelaksanaan menunggu perintah pemilik proyek.
+
+### Audit desain Tahap 4
+
+Design read: panel pengelolaan FAQ untuk satu admin rumah sakit, dengan bahasa visual hangat dan tenang dari PRD serta kontrol administratif yang jelas.
+
+- Design variance 3: tata letak stabil untuk tugas pengelolaan data.
+- Motion intensity 2: hanya umpan balik fokus, tombol, dan dialog.
+- Visual density 4: informasi tiap FAQ cukup lengkap tanpa tabel padat.
+- Em-dash/en-dash audit: Pass, nol U+2014 dan U+2013 pada berkas UI Tahap 4.
+- Section-Layout-Repetition: Pass, halaman daftar memakai pembuka, filter, lalu daftar kartu fungsional; form memakai satu kolom field dan toolbar; pratinjau memakai artikel jawaban.
+- Hero discipline: Pass, panel admin tidak memakai hero pemasaran; judul daftar satu baris pada desktop, pengantar 14 kata, dan Tambah FAQ terlihat pada pembuka. Form dan pratinjau memakai judul halaman singkat.
+
+Pre-Flight Check tasteskill Section 14, setiap kotak:
+
+1. Pass, brief inference: panel FAQ rumah sakit untuk admin mengikuti kebutuhan pengelolaan yang jelas.
+2. Pass, dial values: 3/2/4 disebutkan dengan alasan di atas.
+3. Pass, design system: tema PRD dibangun pada Tailwind dan Blade yang sudah dipakai proyek.
+4. Pass, redesign mode: kerangka admin Tahap 3 dipertahankan dan dinavigasi ulang hanya untuk FAQ.
+5. Pass, karakter dash: tidak ada em-dash atau en-dash dalam berkas antarmuka baru.
+6. Pass, page theme lock: semua layar Tahap 4 memakai tema terang.
+7. Pass, color consistency: hijau rumah sakit tetap aksen utama; merah dibatasi untuk galat dan hapus.
+8. Pass, shape consistency: bidang utama radius 16 piksel, kontrol radius 12 piksel.
+9. Pass, button contrast: teks putih pada hijau utama terbaca; tombol destruktif memakai merah gelap.
+10. Pass, CTA wrap: label Tambah FAQ, Simpan FAQ, dan Hapus Permanen tidak dirancang membungkus pada desktop.
+11. Pass, form contrast: input berbatas gelap, label jelas, fokus sage, dan galat merah gelap.
+12. Pass, serif discipline: tidak ada font serif.
+13. Pass, premium palette: aplikasi publik rumah sakit memakai palet PRD, bukan palet produk premium.
+14. Pass, italic clearance: tombol miring hanya berupa huruf I dengan ruang cukup; tidak ada judul miring.
+15. Pass, hero viewport: tidak ada hero pemasaran; tindakan utama ditempatkan di pembuka halaman.
+16. Pass, hero top padding: pembuka admin memakai jarak atas sedang, tanpa ruang kosong setinggi layar.
+17. Pass, hero stack: pembuka daftar hanya berisi eyebrow, judul, pengantar, dan tindakan utama.
+18. Pass, eyebrow count: satu eyebrow pada daftar dan satu pada pratinjau, sesuai konteks halaman terpisah.
+19. Pass, split-header ban: judul dan pengantar tersusun vertikal.
+20. Pass, zigzag cap: tidak ada pola gambar dan teks zigzag.
+21. Pass, duplicate CTA: Tambah, Edit, Pratinjau, dan Hapus memiliki tujuan berbeda.
+22. Pass, logo wall: tidak ada deretan logo.
+23. Pass, bento diversity: tidak ada bento; daftar kartu dipakai sesuai PRD admin.
+24. Pass, trusted-by wall: tidak ada klaim atau logo pihak lain.
+25. Pass, copy audit: teks kontrol berbahasa Indonesia, deskriptif, dan tidak mengklaim konten medis.
+26. Pass, motion motivated: transisi warna memberi umpan balik interaksi.
+27. Pass, marquee: tidak ada marquee.
+28. Pass, navigation line: header desktop tetap satu baris dan 72 piksel.
+29. Pass, section layout repetition: pembuka, filter, kartu, formulir, dan artikel pratinjau memiliki fungsi berbeda.
+30. Pass, bento rhythm: tidak ada bento atau sel kosong.
+31. Pass, long lists: daftar FAQ memakai kartu administratif sesuai PRD, bukan daftar bergaris rapat.
+32. Pass, real images: gambar jawaban dilarang PRD dan tidak ada gambar dekoratif yang diperlukan.
+33. Pass, image overlays: tidak ada gambar atau label di atas gambar.
+34. Pass, photo credits: tidak ada foto dekoratif.
+35. Pass, version footer: tidak ada label versi.
+36. Pass, micro-meta: tidak ada kalimat dekoratif di bawah eyebrow.
+37. Pass, hero strip: tidak ada strip slogan.
+38. Pass, floating heading subtext: tidak ada teks penjelas mengambang.
+39. Pass, scoring bars: tidak ada batang penilaian.
+40. Pass, locale strips: tidak ada strip kota, cuaca, atau jam.
+41. Pass, scroll cues: tidak ada petunjuk gulir dekoratif.
+42. Pass, hero version: tidak ada label versi di pembuka.
+43. Pass, section numbering eyebrow: tidak ada penomoran dekoratif.
+44. Pass, decorative dots: tidak ada titik dekoratif.
+45. Pass, repeated row borders: daftar kartu memakai batas per kartu, bukan garis atas dan bawah berulang.
+46. Pass, content density: setiap kartu menampilkan informasi kerja yang relevan tanpa tabel padat.
+47. Pass, quotes: tidak ada kutipan.
+48. Pass, motion claimed: intensitas 2 sesuai transisi warna ringan yang digunakan.
+49. Pass, GSAP patterns: tidak ada animasi GSAP atau gulir kompleks.
+50. Pass, scroll listener: tidak ada pendengar acara gulir.
+51. Pass, reduced motion: CSS global menekan durasi animasi dan transisi saat diminta.
+52. Pass, dark mode: tema tunggal terang sesuai PRD dan theme lock; mode gelap tidak diminta.
+53. Pass, mobile collapse: daftar tindakan membungkus, form satu kolom, dan navigasi mobile tersedia.
+54. Pass, viewport stability: layout memakai `dvh`, tanpa tinggi layar tetap.
+55. Pass, useEffect cleanup: Blade dan JavaScript ringan tidak memakai React atau `useEffect`.
+56. Pass, empty/loading/error: daftar kosong, tombol simpan memproses, validasi field, dan pesan error tersedia.
+57. Pass, cards omitted: kartu dipakai hanya untuk record FAQ sesuai kebutuhan administratif PRD.
+58. Pass, icons: kontrol memakai label teks, tanpa ikon campuran atau SVG buatan.
+59. Pass, motion client leaf: tidak ada komponen animasi React.
+60. Pass, AI tells: tidak ada tiga kartu promosi setara, warna ungu, atau konten pemasaran.
+61. Pass, Core Web Vitals plausibility: build lokal kecil dan tidak memuat font atau gambar jaringan; metrik lapangan belum diukur.
+62. Pass, one design system: hanya Tailwind lokal dan token PRD yang digunakan.
+
 ## Tahap 3: autentikasi dan kerangka admin
 
 Status: selesai untuk kode pada 4 Oktober 2026. Uji login langsung terhadap MySQL menunggu migration dan akun admin yang akan disiapkan pemilik proyek.

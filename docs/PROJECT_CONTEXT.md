@@ -6,7 +6,7 @@
 - FAQ memiliki jawaban singkat wajib, jawaban lengkap opsional, status aktif atau nonaktif, slug stabil, dan urutan yang kelak dapat diubah admin.
 - Jawaban lengkap menggunakan rich text terbatas dan harus disanitasi di server sebelum disimpan. Pertanyaan serta jawaban singkat tetap berupa teks yang di-escape.
 - Seeder pertanyaan awal hanya memakai sembilan topik PRD. Tanpa jawaban resmi, semua record awal berisi `Jawaban belum tersedia.`, tidak mempunyai jawaban lengkap, dan nonaktif.
-- Seeder admin menunggu kredensial awal yang ditetapkan pemilik proyek. Seeder tidak boleh mereset password akun yang sudah ada.
+- Atas permintaan terbaru pemilik proyek, `AdminSeeder` berisi kredensial awal tetap dalam source code dan membuat satu akun admin. Seeder tidak mereset akun yang sudah ada saat dijalankan ulang.
 - Login admin memakai session Laravel, email yang dipangkas dan diubah ke huruf kecil, serta batas lima kegagalan per 60 detik untuk kombinasi email dan IP. Logout adalah POST dan mengakhiri session.
 - Halaman publik kelak memakai pencarian frontend, accordion satu terbuka, detail opsional, disclaimer persis sesuai PRD, dan reset setelah 60 detik tanpa interaksi.
 - Tampilan publik mengikuti mockup yang telah ditinjau, dengan hijau `#236B5D`, sage `#DDEDE7`, latar `#F8F7F3`, putih, teks `#26332F`, dan aksen hangat terbatas `#D97757`.
