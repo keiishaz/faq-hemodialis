@@ -29,7 +29,7 @@ class AdminProfileTest extends TestCase
 
         $this->get(route('admin.profile.edit'))
             ->assertOk()
-            ->assertSee('Profil admin')
+            ->assertSee('>Profil</h1>', false)
             ->assertSee('Pengelola Lama')
             ->assertSee('Menu admin')
             ->assertDontSee('password-lama-123');

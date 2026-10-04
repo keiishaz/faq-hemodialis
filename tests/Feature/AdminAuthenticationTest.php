@@ -34,7 +34,7 @@ class AdminAuthenticationTest extends TestCase
 
         $dashboardResponse = $this->get(route('admin.dashboard'))
             ->assertOk()
-            ->assertSee('Selamat datang, Pengelola.');
+            ->assertSee('Ringkasan FAQ Hemodialisis.');
 
         $this->assertStringContainsString('no-store', $dashboardResponse->headers->get('Cache-Control'));
 

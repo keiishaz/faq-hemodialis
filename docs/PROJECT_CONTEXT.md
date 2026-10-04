@@ -10,6 +10,7 @@
 - Login admin memakai session Laravel, email yang dipangkas dan diubah ke huruf kecil, serta batas lima kegagalan per 60 detik untuk kombinasi email dan IP. Logout adalah POST dan mengakhiri session.
 - Profil admin menyediakan pembaruan nama dan email serta formulir password terpisah. Perubahan email memerlukan password saat ini; perubahan password meregenerasi session aktif dan merotasi remember token bila digunakan.
 - Halaman publik memakai pencarian frontend, accordion satu terbuka, detail opsional, dan disclaimer persis sesuai PRD. Setelah 60 detik tanpa interaksi, daftar kembali ke keadaan awal dan detail kembali ke daftar. Timer hanya aktif pada layout publik.
-- Tampilan publik mengikuti mockup yang telah ditinjau, dengan hijau `#236B5D`, sage `#DDEDE7`, latar `#F8F7F3`, putih, teks `#26332F`, dan aksen hangat terbatas `#D97757`.
-- Aset utama tersedia secara lokal. Nomor kontak dan logo resmi hanya dipakai bila diberikan.
+- Arah visual terbaru mengikuti `UI_Reference_FAQ_Hemodialisis_RSUD_M_Yunus.pdf` untuk 12 keadaan publik dan admin. Palet biru dan sian pada referensi ini menggantikan palet hijau pada rancangan lama, tanpa mengubah fungsi, route, atau konten FAQ.
+- Logo resmi yang diberikan pemilik proyek disalin utuh ke `public/images/rsud-m-yunus-logo.png` dan dipakai pada layar publik serta admin. Rasio dan piksel sumbernya dipertahankan. Tidak ada gambar jawaban.
+- Login admin memakai foto gedung RSUD dari pemilik proyek di panel kiri. Ikon admin memakai SVG Tabler resmi yang tersimpan lokal pada `resources/icons`, dengan lisensi MIT disertakan; paket runtime baru tidak ditambahkan.
 - Pengerjaan berlangsung satu tahap per persetujuan pemilik proyek. Lihat `PROGRESS.md` untuk status aktual.

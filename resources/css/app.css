@@ -4,18 +4,132 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Segoe UI', Tahoma, Arial, sans-serif;
-    --color-hospital: #236B5D;
-    --color-hospital-deep: #174E43;
-    --color-sage: #DDEDE7;
-    --color-paper: #F8F7F3;
-    --color-ink: #26332F;
+    --font-sans: 'Segoe UI', Arial, sans-serif;
+    --color-hospital: #0867B2;
+    --color-hospital-deep: #16466D;
+    --color-sage: #E3F3FA;
+    --color-paper: #F3F8FC;
+    --color-ink: #20394D;
 }
 
 :where(a, button, input, textarea, select, summary, [contenteditable='true']):focus-visible {
-    outline: 3px solid #236B5D;
+    outline: 3px solid #0867B2;
     outline-offset: 3px;
 }
+
+body {
+    overflow-x: clip;
+}
+
+.public-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(112deg, #075BAA 0%, #087CC2 58%, #10A7D0 100%);
+}
+
+.public-hero::before,
+.public-hero::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 34rem;
+    aspect-ratio: 1;
+    border: 1px solid rgb(255 255 255 / 16%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: hero-drift 24s ease-in-out infinite alternate;
+}
+
+.public-hero::before {
+    right: -11rem;
+    top: -16rem;
+    box-shadow: 0 0 0 5rem rgb(255 255 255 / 5%), 0 0 0 10rem rgb(255 255 255 / 4%);
+}
+
+.public-hero::after {
+    left: -20rem;
+    bottom: -24rem;
+    width: 42rem;
+    animation-duration: 31s;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes hero-drift {
+    to { transform: translate3d(12px, -9px, 0); }
+}
+
+.faq-search-shell {
+    box-shadow: 0 16px 38px rgb(21 83 125 / 10%);
+}
+
+.faq-public-item {
+    box-shadow: 0 3px 12px rgb(21 83 125 / 4%);
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.faq-public-item:has([aria-expanded='true']) {
+    border-color: #87C8E8;
+    box-shadow: 0 10px 30px rgb(21 83 125 / 10%);
+}
+
+.faq-public-item [data-faq-toggle][aria-expanded='true'] {
+    background: #E6F5FC;
+    color: #16466D;
+}
+
+.faq-public-item [data-faq-toggle][aria-expanded='true'] [data-faq-indicator] {
+    background: #0867B2;
+    color: #fff;
+}
+
+.faq-public-item:active,
+.ui-press:active {
+    transform: translateY(1px);
+}
+
+.admin-panel {
+    box-shadow: 0 4px 24px rgb(28 75 107 / 4%);
+}
+
+.admin-nav-link[aria-current='page'] {
+    color: #0867B2;
+}
+
+.admin-icon {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    background-color: currentColor;
+    -webkit-mask-image: var(--admin-icon-source);
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-image: var(--admin-icon-source);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+.admin-icon-dashboard { --admin-icon-source: url('../icons/layout-dashboard.svg'); }
+.admin-icon-faq { --admin-icon-source: url('../icons/messages.svg'); }
+.admin-icon-profile { --admin-icon-source: url('../icons/user.svg'); }
+.admin-icon-logout { --admin-icon-source: url('../icons/logout.svg'); }
+.admin-icon-drag { --admin-icon-source: url('../icons/grip-vertical.svg'); }
+.admin-icon-edit { --admin-icon-source: url('../icons/pencil.svg'); }
+.admin-icon-preview { --admin-icon-source: url('../icons/eye.svg'); }
+.admin-icon-delete { --admin-icon-source: url('../icons/trash.svg'); }
+.admin-icon-hide { --admin-icon-source: url('../icons/eye-off.svg'); }
+.admin-icon-active { --admin-icon-source: url('../icons/circle-check.svg'); }
+.admin-icon-plus { --admin-icon-source: url('../icons/plus.svg'); }
+.admin-icon-search { --admin-icon-source: url('../icons/search.svg'); }
+.admin-icon-check { --admin-icon-source: url('../icons/check.svg'); }
+.admin-icon-lock { --admin-icon-source: url('../icons/lock.svg'); }
+.admin-icon-info { --admin-icon-source: url('../icons/info-circle.svg'); }
+.admin-icon-list { --admin-icon-source: url('../icons/list.svg'); }
+.admin-icon-list-numbers { --admin-icon-source: url('../icons/list-numbers.svg'); }
+.admin-icon-link { --admin-icon-source: url('../icons/link.svg'); }
 
 .faq-editor p,
 .faq-content p {
@@ -36,7 +150,7 @@
 
 .faq-editor a,
 .faq-content a[href] {
-    color: #236B5D;
+    color: #0867B2;
     text-decoration: underline;
     overflow-wrap: anywhere;
 }
@@ -48,7 +162,7 @@
 }
 
 .faq-content a[href]:focus-visible {
-    outline: 3px solid #236B5D;
+    outline: 3px solid #0867B2;
     outline-offset: 3px;
 }
 
@@ -61,12 +175,12 @@
 }
 
 .faq-sort-item.is-dragging {
-    border-color: #236B5D;
-    background: #F0F8F3;
+    border-color: #0867B2;
+    background: #E3F3FA;
 }
 
 .faq-sort-item.is-drop-target {
-    outline: 3px solid #A9D1BE;
+    outline: 3px solid #87C8E8;
     outline-offset: 3px;
 }
 

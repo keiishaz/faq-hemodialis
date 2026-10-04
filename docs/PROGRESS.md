@@ -1,5 +1,130 @@
 # Progres pengembangan
 
+## Redesign visual setelah Tahap 9
+
+Status: penyesuaian admin terakhir selesai pada 5 Oktober 2026. Redesign mengikuti prompt tasteskill dan PDF referensi terbaru untuk 12 keadaan publik serta admin, dengan pengecualian login dua sisi sesuai permintaan langsung pemilik proyek. Palet biru dan sian menggantikan palet hijau rancangan sebelumnya. Logo resmi PNG disalin utuh dan dipakai konsisten pada layout publik, login, serta layout admin.
+
+- View publik, view admin, layout, dan CSS diperbarui untuk hierarki, spacing, responsivitas, fokus, keadaan accordion, hasil pencarian kosong, 404, status FAQ, serta dialog hapus. Koreksi admin terakhir mempertahankan login dua sisi dengan foto gedung di kiri, lalu mengecilkan header, sidebar, navigasi, judul, kartu metrik, dan jarak konten ke skala kerja yang lebih wajar. Ikon Tabler lokal tetap dipakai pada navigasi dan aksi, Keluar berwarna merah, dan urutan FAQ memakai pegangan seret berikon. Bagian Status pada formulir kini berada dalam alur normal dengan garis pemisah yang berjarak dari label, pilihan, dan tombol; teks bantuan yang tidak perlu disembunyikan dari tampilan tetapi tetap tersedia bagi pembaca layar. Motion dekoratif pelan dibatasi pada hero publik dan menghormati `prefers-reduced-motion`.
+- Rute, nama rute, label navigasi utama, field formulir, ID dan hook yang ada, disclaimer, JavaScript, controller, model, validasi, migration, seeder, dan data MySQL tidak diubah. Sesuai instruksi terbaru untuk mengikuti PDF, judul daftar admin menjadi Kelola FAQ dan judul profil menjadi Profil; pintasan Edit pada tabel dashboard serta tautan kembali di atas formulir dihilangkan karena aksi Edit tetap tersedia di daftar FAQ dan formulir masih memiliki tombol Batal. Tes heading profil disesuaikan.
+- Pemeriksaan browser mencakup publik dan login pada ukuran kiosk serta HP 320 piksel; hasil kosong, accordion, detail, dan 404 diperiksa. Enam halaman admin terautentikasi serta dialog hapus diperiksa melalui HTML preview sementara dari tes SQLite dalam memori dengan data sintetis dan jawaban placeholder. Setelah koreksi skala, login, dashboard, dan formulir tambah diperiksa lagi pada desktop serta HP 320 piksel; pemisah Status dan tombol diverifikasi tidak bersinggungan, ikon termuat, dan tidak ada luapan horizontal pada 320 piksel. Tes preview dan berkas HTML publik sementaranya dihapus setelah pemeriksaan sehingga MySQL tidak tersentuh.
+- Setelah koreksi admin, `npm run build` tanpa peringatan aset, seluruh 38 tes dengan 278 assertion, dan `git diff --check` lulus.
+- Audit em-dash/en-dash dan seluruh 62 butir tasteskill Section 14 dilaporkan Pass. Hash SHA-256 logo salinan sama dengan file resmi sumber. Foto gedung yang diberikan pemilik proyek dipakai pada login tanpa suntingan. Penyimpangan yang disengaja dari PDF: login dua sisi berfoto sesuai instruksi langsung, kolom password saat ini di profil tetap tersedia sesuai validasi aplikasi, dan jawaban medis contoh pada PDF tidak dimasukkan ke data.
+- Database MySQL tetap berisi data lama. Saat pemeriksaan terdapat satu FAQ aktif dengan konten percobaan; konten medis perlu ditinjau pengelola sebelum aplikasi digunakan pasien.
+
+Tahap redesign tidak menetapkan Step 5. Kelanjutan perlu dipilih pemilik proyek setelah meninjau layar admin dengan data dan kredensial miliknya.
+
+### Audit akhir redesign
+
+Design read: antarmuka FAQ rumah sakit untuk pasien, keluarga, pengunjung, dan pengelola, dengan bahasa visual tenang, terbaca, dan profesional yang mengikuti PDF referensi. `DESIGN_VARIANCE=3` karena layanan kesehatan membutuhkan komposisi stabil; `MOTION_INTENSITY=2` karena gerak hanya dekorasi lembut pada publik; `VISUAL_DENSITY=4` karena tugas admin memerlukan informasi ringkas tanpa sesak. Mode tasteskill: Overhaul visual dengan mekanisme aplikasi tetap.
+
+- Em-dash dan en-dash: Pass. Tidak ditemukan U+2014 atau U+2013 pada view, CSS, dan JavaScript antarmuka.
+- Section-Layout-Repetition: Pass. Publik memakai identitas header, hero, pencarian, daftar accordion, dan footer sesuai fungsi. Admin memakai login dua sisi, ringkasan dan tabel dashboard, tabel pengelolaan, panel editor, artikel pratinjau, dialog konfirmasi, dan dua panel formulir profil.
+- Hero discipline: Pass. Judul publik satu baris di desktop dan maksimal dua baris pada HP 320 piksel, pengantar enam kata, serta pencarian muncul pada viewport awal. Layar admin tidak memakai hero pemasaran.
+- Preservation: Pass. Perubahan URL/rute, nama rute, label navigasi utama, nama field form, ID/hook yang sudah ada, disclaimer, aturan bisnis, dan perilaku backend: tidak ada. Perbandingan atribut `name`, `id`, dan `data-*` pada view terhadap Git HEAD tidak menemukan atribut lama yang hilang. Judul Daftar FAQ menjadi Kelola FAQ, Profil admin menjadi Profil, pintasan Edit pada dashboard, dan tautan kembali di atas formulir dihapus untuk menyamai PDF; fungsi Edit tetap tersedia pada daftar FAQ dan Batal tetap ada di formulir.
+- Database/backend: Pass. Tidak ada perubahan migration, tabel, kolom, relasi, model, controller, validasi, kontrak API, seeder, atau data MySQL untuk redesign. Perubahan `.env.example` dan `composer.json` yang sudah ada berasal dari Tahap 9, bukan redesign.
+- Logo: Pass. SHA-256 salinan PNG sama dengan sumber resmi; seluruh oval, teks, dan pita terlihat dengan `object-contain` serta rasio asli. Foto gedung login memakai berkas yang diberikan pemilik proyek.
+- Reference fidelity: Pass. Halaman PDF 1 sampai 4 dipenuhi oleh beranda, detail, hasil pencarian kosong, dan 404 publik. Halaman 6 sampai 12 dipenuhi oleh dashboard, daftar FAQ, tambah, edit, pratinjau nonaktif, dialog hapus, dan profil admin. Login memakai kembali komposisi dua sisi atas permintaan langsung, dengan foto gedung menggantikan bidang biru, sehingga sengaja berbeda dari halaman 5 PDF. Aksi daftar kini berikon seperti PDF dengan nama aksesibel; kolom password saat ini pada profil tetap ada karena validasi yang berjalan; konten medis contoh pada PDF tidak disalin ke data.
+
+| Halaman PDF | Hasil | Kesesuaian dan penyesuaian |
+| --- | --- | --- |
+| 1. Beranda FAQ | Pass | Identitas, hero, pencarian, dan accordion mengikuti hierarki referensi. |
+| 2. Detail FAQ | Pass | Artikel, tautan kembali, dan disclaimer tetap jelas. |
+| 3. Hasil pencarian kosong | Pass | Pesan dan pemulihan pencarian terlihat. |
+| 4. Konten tidak tersedia | Pass | Keadaan 404 memakai bahasa visual yang sama. |
+| 5. Login admin | Pass | Komposisi dua sisi dan foto gedung di kiri adalah pengecualian yang diminta langsung pemilik proyek; ukuran header dan kartu diperkecil. |
+| 6. Dashboard | Pass | Sidebar, topbar, tiga metrik nyata, dan tabel terbaru mengikuti referensi dengan skala yang lebih rapat; pintasan Edit di tabel dihapus. |
+| 7. Kelola FAQ | Pass | Pencarian, tab, gagang urutan, tabel, status, dan aksi berikon mengikuti referensi. |
+| 8. Tambah FAQ | Pass | Panel formulir, toolbar, status, dan aksi simpan mengikuti referensi; garis pemisah Status memiliki jarak yang jelas. |
+| 9. Edit FAQ | Pass | Memakai struktur formulir yang sama dengan data dan validasi yang telah ada; pemisah Status juga diperbaiki. |
+| 10. Pratinjau nonaktif | Pass | Banner status, artikel, disclaimer, dan Edit mengikuti susunan referensi. |
+| 11. Konfirmasi hapus | Pass | Dialog menampilkan pertanyaan, peringatan, Batal, dan aksi merah sesuai referensi. |
+| 12. Profil | Pass | Dua panel akun dan password mengikuti referensi; kolom password saat ini untuk perubahan email tetap tersedia sesuai validasi. |
+
+- HCI/accessibility: Pass. Hierarki, affordance, status aktif/nonaktif, label form, fokus keyboard, konfirmasi hapus, target sentuh, kontras, dan responsivitas diperiksa. Tidak ada tindakan penting yang hanya dapat dilakukan melalui hover.
+- Motion/performance: Pass. Dekorasi hero publik memakai transform CSS pelan, tanpa library animasi atau loop JavaScript; `prefers-reduced-motion` mematikannya. Build CSS sekitar 82 KB dan JavaScript sekitar 7 KB sebelum gzip, foto login sekitar 75 KB, serta ikon SVG lokal masing-masing di bawah 1 KB; metrik Web Vitals produksi belum diukur.
+- Brand/design quality: Pass. Logo dan foto RSUD asli, bahasa Indonesia, komposisi layanan informasi, ikon garis yang konsisten, palet biru-sian PDF, radius konsisten, serta batas dekorasi menghindari templat medis generik dan tumpukan kartu tanpa fungsi.
+
+Pre-Flight Check tasteskill Section 14, setiap kotak:
+
+1. Pass: design read untuk layanan FAQ rumah sakit dinyatakan di atas.
+2. Pass: tiga dial beserta alasan ditetapkan secara eksplisit.
+3. Pass: Blade, Tailwind, dan CSS lokal dipakai sebagai satu fondasi proyek.
+4. Pass: mode Overhaul visual disertai audit serta pembekuan mekanisme.
+5. Pass: nol em-dash dan en-dash pada antarmuka.
+6. Pass: tema terang tetap pada seluruh layar publik dan admin.
+7. Pass: biru PDF adalah aksen utama; hijau status dan merah bahaya bermakna semantik.
+8. Pass: panel, field, dan tombol memakai radius lembut yang konsisten.
+9. Pass: teks putih pada tombol biru berkontras sekitar 5,84:1.
+10. Pass: label CTA tidak membungkus pada desktop.
+11. Pass: label, teks, border, dan fokus field memiliki kontras yang jelas.
+12. Pass: tidak ada font serif.
+13. Pass: larangan palet premium konsumen tidak relevan untuk rumah sakit dan tidak dipakai.
+14. Pass: tidak ada judul display miring yang dapat terpotong.
+15. Pass: judul publik paling banyak dua baris, pengantar enam kata, dan pencarian terlihat di awal.
+16. Pass: jarak atas hero publik maksimal 72 piksel pada desktop.
+17. Pass: hero publik hanya berisi judul dan pengantar.
+18. Pass: tidak ada eyebrow dekoratif berulang di atas judul section.
+19. Pass: tidak ada pola judul besar kiri dengan penjelasan kecil di kanan.
+20. Pass: tidak ada section gambar-teks zigzag.
+21. Pass: tindakan yang sama tidak digandakan pada satu keadaan layar.
+22. Pass: tidak ada logo wall.
+23. Pass: tidak ada bento dekoratif.
+24. Pass: tidak ada strip trusted-by atau logo palsu.
+25. Pass: teks antarmuka diperiksa dan preview sintetis tidak mengarang jawaban medis.
+26. Pass: gerak mendukung kedalaman visual hero tanpa menggerakkan isi medis.
+27. Pass: tidak ada marquee.
+28. Pass: topbar desktop setinggi 64 piksel; sidebar lebih ringkas dengan navigasi 14 piksel dan target sentuh 44 piksel.
+29. Pass: setiap kelompok konten memakai bentuk yang sesuai tugasnya, seperti tabel atau formulir.
+30. Pass: tidak ada sel bento kosong.
+31. Pass: FAQ publik memakai accordion dan admin memakai tabel/daftar responsif.
+32. Pass: gambar yang dipakai adalah logo resmi dan foto gedung dari pengguna; gambar jawaban tidak ditambahkan.
+33. Pass: tidak ada label dekoratif yang menutupi gambar.
+34. Pass: tidak ada kredit foto dekoratif.
+35. Pass: tidak ada footer versi produk.
+36. Pass: tidak ada kalimat meta kecil di bawah eyebrow.
+37. Pass: tidak ada strip teks dekoratif di dasar hero.
+38. Pass: tidak ada subteks melayang pada kanan judul section.
+39. Pass: tidak ada bar skor atau progres dekoratif.
+40. Pass: tidak ada strip lokasi, cuaca, atau waktu.
+41. Pass: tidak ada petunjuk scroll dekoratif.
+42. Pass: tidak ada label versi pada hero.
+43. Pass: tidak ada eyebrow nomor section.
+44. Pass: tidak ada titik dekoratif tanpa status.
+45. Pass: baris tabel memakai pemisah bawah saja, bukan bingkai atas dan bawah berulang.
+46. Pass: pratinjau sintetis hanya enam FAQ; tampilan nyata mengikuti data dan tugas pengelolaan.
+47. Pass: tidak ada kutipan atau atribusi dekoratif.
+48. Pass: intensitas gerak bernilai 2, sehingga animasi besar tidak diklaim.
+49. Pass: tidak ada GSAP atau pola sticky/horizontal pan.
+50. Pass: tidak ada scroll-driven animation; pendeteksi idle scroll yang sudah ada tetap untuk fungsi kiosk.
+51. Pass: preferensi reduced motion mematikan dekorasi hero.
+52. Pass: mode gelap tidak diperlukan karena tema terang dikunci.
+53. Pass: sidebar admin berubah menjadi menu mobile dan tidak ada luapan horizontal pada 320 piksel.
+54. Pass: layout memakai tinggi minimum viewport dinamis, bukan tinggi layar kaku.
+55. Pass: tidak ada React `useEffect`; JavaScript lama mempertahankan pelepasan listener.
+56. Pass: keadaan kosong, error validasi, status, dan simpan yang sudah ada tetap ditampilkan.
+57. Pass: kartu dipakai hanya untuk pengelompokan metrik, form, daftar, dan artikel.
+58. Pass: ikon SVG berasal dari paket resmi Tabler berlisensi MIT, disimpan lokal, dan tidak digambar ulang.
+59. Pass: tidak ada komponen React atau animasi client-leaf yang perlu diisolasi.
+60. Pass: tiga kartu metrik admin mewakili tiga hitungan nyata, bukan fitur pemasaran palsu.
+61. Pass: foto 75 KB, ikon lokal kecil, dan animasi transform ringan membuat target Web Vitals masuk akal; pengukuran produksi masih perlu dilakukan.
+62. Pass: satu sistem visual Tailwind lokal dipakai di seluruh aplikasi.
+
+## Tahap 9: persiapan penerapan
+
+Status: persiapan kode selesai pada 4 Oktober 2026. Aplikasi belum diterapkan ke server dan data MySQL tidak diubah.
+
+- Skrip `composer setup` tidak lagi menjalankan migration otomatis. Skrip `post-create-project-cmd` tidak lagi membuat berkas SQLite atau menjalankan migration. Migration MySQL tetap dijalankan sendiri oleh pemilik proyek setelah target diperiksa.
+- `.env.example` memakai nama aplikasi yang sesuai dan mencantumkan `HOSPITAL_CONTACT` sebagai variabel opsional tanpa nilai rahasia. `.env` yang sedang dipakai tidak diubah.
+- Build produksi Vite berhasil dan menghasilkan manifest serta aset CSS dan JavaScript lokal di `public/build`. Direktori build diabaikan Git, sehingga proses penerapan harus membangun aset atau menyertakan hasil build tersebut. Berkas `public/hot` tidak ada.
+- Pemeriksaan `composer validate --no-check-publish`, 38 tes dengan 278 assertion, daftar route, dan `git diff --check` lulus. Tidak ditemukan URL aset eksternal pada view aplikasi, JavaScript, CSS, atau kode aplikasi yang diperiksa. Pemeriksaan perangkat kiosk fisik belum dilakukan.
+- Server tujuan perlu PHP 8.3 atau lebih baru beserta ekstensi Laravel, MySQL, web root `public`, dan izin tulis untuk `storage` serta `bootstrap/cache`. Konfigurasi server perlu `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` sesuai alamat nyata, `APP_KEY` yang disimpan aman, koneksi MySQL, dan aset hasil build. Jalankan `php artisan optimize` setelah konfigurasi produksi benar. Route `/up` dapat memeriksa aplikasi dapat boot, tetapi tidak membuktikan koneksi MySQL atau mutu konten.
+- Sebelum aplikasi dipakai pasien, pengelola perlu meninjau seluruh FAQ aktif. Pemeriksaan baca saja menemukan sembilan FAQ, satu aktif, dan satu FAQ aktif tersebut masih berisi jawaban placeholder. Seeder admin masih memuat kredensial awal tetap dalam source code sesuai permintaan pemilik proyek; kredensial itu perlu diganti sebelum akses produksi. Jangan menjalankan seeder admin pada produksi dengan kredensial awal tersebut.
+- Target hosting atau jaringan, sertifikat, perangkat kiosk, dan cara membawa artefak build belum ditetapkan. Tidak ada migration, seeder, perubahan `.env`, cache konfigurasi, atau deployment yang dijalankan pada tahap ini.
+
+Langkah berikutnya yang diusulkan: tetapkan target penerapan dan cara membangun atau mengirim aset, lalu amankan kredensial admin serta tinjau konten FAQ aktif sebelum aplikasi digunakan. Pelaksanaan menunggu arahan pemilik proyek.
+
+Audit desain Tahap 9: tidak ada perubahan UI. Audit em-dash dan en-dash pada berkas yang diubah: Pass, nol U+2014 dan U+2013. Section-Layout-Repetition dan hero discipline tetap seperti Tahap 8. Pre-Flight Check Section 14 tidak diulang karena halaman dan interaksinya tidak diubah.
+
 ## Tahap 8: reset publik dan verifikasi
 
 Status: selesai untuk kode pada 4 Oktober 2026. Data MySQL tidak diubah pada tahap ini.
