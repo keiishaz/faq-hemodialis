@@ -1,4 +1,4 @@
-@extends('layouts.public')
+@extends('layouts.public', ['publicPageType' => 'list'])
 
 @section('content')
     <div class="max-w-3xl">

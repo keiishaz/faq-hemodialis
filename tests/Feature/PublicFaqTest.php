@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Faq;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -79,6 +80,7 @@ class PublicFaqTest extends TestCase
 
         $this->get(route('public.faq.show', $activeFaq->slug))
             ->assertOk()
+            ->assertSee('data-public-page-type="detail"', false)
             ->assertSee('<strong>lengkap</strong>', false)
             ->assertDontSee('Jawaban singkat yang berbeda.')
             ->assertDontSee('alert(1)')
@@ -108,9 +110,22 @@ class PublicFaqTest extends TestCase
 
         $this->get(route('public.index'))
             ->assertOk()
+            ->assertSee('data-public-page-type="list"', false)
             ->assertSee('Informasi belum tersedia. Silakan hubungi petugas.')
             ->assertDontSee('Pertanyaan belum aktif?')
             ->assertDontSee('Jawaban belum tersedia.')
             ->assertDontSee('Kontak:');
+    }
+
+    public function test_idle_reset_is_scoped_to_public_pages(): void
+    {
+        $this->get(route('public.index'))->assertSee('data-public-page-type="list"', false);
+        $this->get(route('admin.login'))->assertDontSee('data-public-page', false);
+
+        $this->actingAs(User::factory()->create());
+
+        $this->get(route('admin.dashboard'))->assertDontSee('data-public-page', false);
+        $this->get(route('admin.profile.edit'))->assertDontSee('data-public-page', false);
+        $this->get(route('admin.faqs.index'))->assertDontSee('data-public-page', false);
     }
 }

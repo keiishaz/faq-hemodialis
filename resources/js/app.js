@@ -17,6 +17,7 @@ if (adminLoginForm) {
 }
 
 const publicFaqList = document.querySelector('[data-public-faq-list]');
+let resetPublicFaqList = null;
 
 if (publicFaqList) {
     const searchInput = publicFaqList.querySelector('[data-faq-search]');
@@ -58,6 +59,11 @@ if (publicFaqList) {
         searchInput.focus();
     };
 
+    resetPublicFaqList = () => {
+        searchInput.value = '';
+        updateSearch();
+    };
+
     items.forEach((item) => {
         item.querySelector('[data-faq-toggle]').addEventListener('click', () => {
             const toggle = item.querySelector('[data-faq-toggle]');
@@ -76,6 +82,106 @@ if (publicFaqList) {
     searchInput.addEventListener('input', updateSearch);
     clearButton.addEventListener('click', clearSearch);
     emptyClearButton.addEventListener('click', clearSearch);
+}
+
+const publicPage = document.querySelector('[data-public-page]');
+
+if (publicPage) {
+    const idleDuration = 60_000;
+    let lastActivityAt = Date.now();
+    let timerId = null;
+    let listeners = null;
+    let isReset = false;
+    let ignoreScroll = false;
+
+    const resetPage = () => {
+        clearTimeout(timerId);
+        timerId = null;
+
+        if (publicPage.dataset.publicPageType !== 'list') {
+            window.location.replace(publicPage.dataset.publicIndexUrl);
+            return;
+        }
+
+        isReset = true;
+        ignoreScroll = true;
+        resetPublicFaqList?.();
+        publicPage.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close());
+
+        if (publicPage.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
+
+        window.scrollTo(0, 0);
+    };
+
+    const checkIdle = () => {
+        if (isReset) {
+            return;
+        }
+
+        const remaining = idleDuration - (Date.now() - lastActivityAt);
+
+        if (remaining <= 0) {
+            resetPage();
+            return;
+        }
+
+        clearTimeout(timerId);
+        timerId = setTimeout(checkIdle, remaining);
+    };
+
+    const recordActivity = () => {
+        isReset = false;
+        ignoreScroll = false;
+        lastActivityAt = Date.now();
+        checkIdle();
+    };
+
+    const recordScroll = () => {
+        if (!ignoreScroll) {
+            recordActivity();
+        }
+    };
+
+    const startListening = () => {
+        if (listeners) {
+            return;
+        }
+
+        listeners = new AbortController();
+        const options = { signal: listeners.signal };
+
+        window.addEventListener('pointerdown', recordActivity, options);
+        window.addEventListener('input', recordActivity, options);
+        window.addEventListener('keydown', recordActivity, options);
+        window.addEventListener('wheel', recordActivity, { ...options, passive: true });
+        document.addEventListener('scroll', recordScroll, { ...options, capture: true, passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                checkIdle();
+            }
+        }, options);
+
+        checkIdle();
+    };
+
+    window.addEventListener('pagehide', () => {
+        listeners?.abort();
+        listeners = null;
+        clearTimeout(timerId);
+        timerId = null;
+    });
+
+    window.addEventListener('pageshow', () => {
+        startListening();
+
+        if (!document.hidden) {
+            checkIdle();
+        }
+    });
+
+    startListening();
 }
 
 const faqForm = document.querySelector('[data-faq-form]');
