@@ -2,6 +2,21 @@ const adminLoginForm = document.querySelector('[data-admin-login-form]');
 
 if (adminLoginForm) {
     const submitButton = adminLoginForm.querySelector('[data-login-submit]');
+    const passwordInput = adminLoginForm.querySelector('[data-login-password]');
+    const passwordToggle = adminLoginForm.querySelector('[data-password-toggle]');
+    const passwordIcon = passwordToggle.querySelector('[data-password-icon]');
+
+    passwordToggle.addEventListener('click', () => {
+        const isVisible = passwordInput.type === 'text';
+        const label = isVisible ? 'Tampilkan password' : 'Sembunyikan password';
+
+        passwordInput.type = isVisible ? 'password' : 'text';
+        passwordToggle.setAttribute('aria-label', label);
+        passwordToggle.setAttribute('aria-pressed', String(!isVisible));
+        passwordToggle.title = label;
+        passwordIcon.classList.toggle('admin-icon-preview', isVisible);
+        passwordIcon.classList.toggle('admin-icon-hide', !isVisible);
+    });
 
     adminLoginForm.addEventListener('submit', () => {
         submitButton.disabled = true;
@@ -29,7 +44,6 @@ if (publicFaqList) {
     const closeAccordion = (item) => {
         item.querySelector('[data-faq-toggle]').setAttribute('aria-expanded', 'false');
         item.querySelector('[data-faq-panel]').hidden = true;
-        item.querySelector('[data-faq-indicator]').textContent = '+';
     };
 
     const updateSearch = () => {
@@ -73,7 +87,6 @@ if (publicFaqList) {
             if (shouldOpen) {
                 toggle.setAttribute('aria-expanded', 'true');
                 item.querySelector('[data-faq-panel]').hidden = false;
-                item.querySelector('[data-faq-indicator]').textContent = '-';
             }
         });
     });

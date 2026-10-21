@@ -6,8 +6,8 @@
                     <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="" width="44" height="44" class="size-full object-contain" aria-hidden="true">
                 </span>
                 <div class="leading-snug">
-                    <p class="text-base font-semibold">{{ config('hospital.name') }}</p>
-                    <p class="mt-1 text-sm text-[#456175]">FAQ Hemodialisis</p>
+                    <p class="text-base font-semibold">{{ config('app.name') }}</p>
+                    <p class="mt-1 text-sm text-[#456175]">{{ config('hospital.name') }}</p>
                 </div>
             </div>
             <address class="border-l-2 border-[#5EB7DC] pl-4 text-sm not-italic leading-relaxed sm:justify-self-end">

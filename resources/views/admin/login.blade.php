@@ -3,17 +3,23 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Masuk Admin | FAQ Hemodialisis</title>
+        <title>Masuk Admin | {{ config('app.name') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-dvh bg-paper font-sans text-ink antialiased">
         <header class="border-b border-[#D8E6EF] bg-white">
-            <div class="mx-auto flex min-h-16 w-full max-w-5xl items-center gap-2.5 px-5 sm:px-8">
-                <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="42" height="42" class="size-10.5 shrink-0 object-contain">
-                <span class="leading-tight">
-                    <span class="block text-sm font-semibold tracking-tight text-hospital-deep">RSUD Dr. M. Yunus Bengkulu</span>
-                    <span class="mt-0.5 block text-xs font-medium text-[#547186]">FAQ Hemodialisis</span>
-                </span>
+            <div class="mx-auto flex min-h-16 w-full max-w-5xl items-center justify-between gap-3 px-5 py-2 sm:px-8">
+                <div class="flex min-w-0 items-center gap-2.5">
+                    <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="42" height="42" class="size-10.5 shrink-0 object-contain">
+                    <span class="min-w-0 leading-tight">
+                        <span class="block text-sm font-semibold tracking-tight text-hospital-deep">{{ config('app.name') }}</span>
+                        <span class="mt-0.5 block text-[11px] leading-snug text-[#547186] sm:text-xs">{{ config('hospital.name') }}</span>
+                    </span>
+                </div>
+                <div class="flex shrink-0 items-center gap-1.5 border-l border-[#D8E6EF] pl-2.5 sm:gap-3 sm:pl-4" aria-label="Logo mitra">
+                    <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="40" height="40" class="size-8 object-contain sm:size-10">
+                    <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="40" height="40" class="institution-logo-poltek size-8 object-contain sm:size-10">
+                </div>
             </div>
         </header>
 
@@ -51,16 +57,22 @@
 
                     <div class="mt-4">
                         <label for="password" class="mb-1 block text-sm font-semibold">Password</label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autocomplete="current-password"
-                            required
-                            aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
-                            @if ($errors->has('password')) aria-describedby="password-error" @endif
-                            class="min-h-11 w-full rounded-xl border border-[#6F8DA2] bg-white px-4 py-2 text-base text-ink outline-none transition-colors focus-visible:border-hospital focus-visible:ring-4 focus-visible:ring-[#E3F3FA]"
-                        >
+                        <div class="relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autocomplete="current-password"
+                                required
+                                data-login-password
+                                aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
+                                @if ($errors->has('password')) aria-describedby="password-error" @endif
+                                class="min-h-11 w-full rounded-xl border border-[#6F8DA2] bg-white py-2 pl-4 pr-14 text-base text-ink outline-none transition-colors focus-visible:border-hospital focus-visible:ring-4 focus-visible:ring-[#E3F3FA]"
+                            >
+                            <button type="button" data-password-toggle aria-controls="password" aria-label="Tampilkan password" aria-pressed="false" title="Tampilkan password" class="absolute top-1/2 right-1 flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                                <span aria-hidden="true" data-password-icon class="admin-icon admin-icon-preview"></span>
+                            </button>
+                        </div>
                         @error('password')
                             <p id="password-error" class="mt-2 text-sm font-medium text-[#A52D38]" role="alert">{{ $message }}</p>
                         @enderror

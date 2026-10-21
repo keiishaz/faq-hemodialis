@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>@yield('title', 'Panel Admin') | FAQ Hemodialisis</title>
+        <title>@yield('title', 'Panel Admin') | {{ config('app.name') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-dvh bg-paper font-sans text-ink antialiased">
@@ -11,9 +11,19 @@
         <div class="min-h-dvh md:grid md:grid-cols-[216px_minmax(0,1fr)]">
             <aside class="hidden border-r border-[#D8E6EF] bg-white px-4 py-5 md:sticky md:top-0 md:flex md:h-dvh md:flex-col">
                 <a href="{{ route('admin.dashboard') }}" class="rounded-lg focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital">
-                    <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="48" height="48" class="size-12 object-contain">
-                    <span class="mt-2 block text-sm font-semibold leading-snug tracking-tight text-hospital-deep">RSUD Dr. M. Yunus Bengkulu</span>
-                    <span class="mt-1 block text-xs font-medium text-[#547186]">FAQ Hemodialisis</span>
+                    <span class="flex items-center gap-2.5">
+                        <span class="flex size-11 items-center justify-center">
+                            <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="36" height="36" class="size-9 object-contain">
+                        </span>
+                        <span class="flex size-11 items-center justify-center">
+                            <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="44" height="44" class="size-11 object-contain">
+                        </span>
+                        <span class="flex size-11 items-center justify-center">
+                            <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="44" height="44" class="institution-logo-poltek size-11 object-contain">
+                        </span>
+                    </span>
+                    <span class="mt-2 block text-sm font-semibold leading-snug tracking-tight text-hospital-deep">{{ config('app.name') }}</span>
+                    <span class="mt-1 block text-xs leading-snug text-[#547186]">{{ config('hospital.name') }}</span>
                 </a>
 
                 <p class="mt-7 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#547186]">Ruang admin</p>
@@ -40,11 +50,18 @@
 
             <div class="min-w-0">
                 <header class="border-b border-[#D8E6EF] bg-white">
-                    <div class="mx-auto flex min-h-16 w-full max-w-[1440px] items-center justify-between gap-4 px-5 sm:px-7 lg:px-8">
-                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 font-bold text-hospital-deep md:hidden">
-                            <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="" width="40" height="40" class="size-10 object-contain" aria-hidden="true">
-                            <span class="max-w-48 text-sm leading-tight">RSUD Dr. M. Yunus Bengkulu</span>
+                    <div class="mx-auto flex min-h-16 w-full max-w-[1440px] items-center justify-between gap-2 px-5 sm:px-7 lg:gap-4 lg:px-8">
+                        <a href="{{ route('admin.dashboard') }}" class="flex min-w-0 items-center gap-2 text-hospital-deep md:hidden">
+                            <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="36" height="36" class="size-9 shrink-0 object-contain">
+                            <span class="min-w-0 leading-tight">
+                                <span class="block text-sm font-semibold">{{ config('app.name') }}</span>
+                                <span class="block text-[10px] text-[#547186] sm:text-xs">{{ config('hospital.name') }}</span>
+                            </span>
                         </a>
+                        <div class="flex shrink-0 items-center gap-1 md:hidden" aria-label="Logo mitra">
+                            <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="28" height="28" class="size-7 object-contain">
+                            <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="28" height="28" class="institution-logo-poltek size-7 object-contain">
+                        </div>
                         <div class="hidden items-center gap-3 text-sm md:flex">
                             <span class="text-[#547186]">Ruang admin</span>
                             <span aria-hidden="true" class="text-[#7E9AAE]">›</span>
@@ -56,8 +73,8 @@
                         </div>
                         <form action="{{ route('admin.logout') }}" method="POST" class="md:hidden">
                             @csrf
-                            <button type="submit" class="flex min-h-12 items-center gap-2 rounded-xl border border-[#D58B87] bg-white px-3 font-medium text-[#B42335] transition-colors hover:bg-[#FFF0F1] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#B42335]">
-                                <span class="admin-icon admin-icon-logout" aria-hidden="true"></span>Keluar
+                            <button type="submit" aria-label="Keluar" class="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl border border-[#D58B87] bg-white px-2 font-medium text-[#B42335] transition-colors hover:bg-[#FFF0F1] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#B42335] sm:px-3">
+                                <span class="admin-icon admin-icon-logout" aria-hidden="true"></span><span class="hidden sm:inline">Keluar</span>
                             </button>
                         </form>
                     </div>
