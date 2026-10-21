@@ -51,21 +51,23 @@
     </div>
 
     <div data-reorder-list @if ($reorderEnabled) data-reorder-url="{{ route('admin.faqs.reorder') }}" data-reorder-snapshot="{{ $orderSnapshot }}" data-reorder-token="{{ csrf_token() }}" data-login-url="{{ route('admin.login') }}" @endif class="overflow-hidden rounded-b-xl border border-[#D6E5EE] bg-white">
-        <div class="hidden grid-cols-[minmax(0,1fr)_96px_126px_284px] gap-4 border-b border-[#D6E5EE] bg-paper px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.05em] text-[#52697B] xl:grid">
+        <div class="hidden grid-cols-[minmax(0,1fr)_96px_136px_284px] gap-4 border-b border-[#D6E5EE] bg-paper px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.05em] text-[#52697B] xl:grid">
             <span class="pl-13">Pertanyaan</span><span>Status</span><span>Diperbarui</span><span>Aksi</span>
         </div>
         @forelse ($faqs as $faq)
-            <article data-sort-item data-sort-id="{{ $faq->id }}" class="faq-sort-item grid gap-3 border-b border-[#E2EDF3] bg-white p-4 last:border-b-0 sm:px-5 sm:py-3 xl:grid-cols-[minmax(0,1fr)_96px_126px_284px] xl:items-center xl:gap-4">
-                    <div class="flex min-w-0 items-center gap-3">
+            <article data-sort-item data-sort-id="{{ $faq->id }}" class="faq-sort-item grid gap-y-3 border-b border-[#E2EDF3] bg-white p-4 last:border-b-0 sm:px-5 sm:py-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-4 xl:grid-cols-[minmax(0,1fr)_96px_136px_284px] xl:items-center">
+                    <div class="flex min-w-0 items-center gap-3 lg:col-span-2 xl:col-span-1">
                         <button type="button" data-sort-handle @disabled(! $reorderEnabled) aria-label="Pindahkan FAQ: {{ $faq->question }}" aria-describedby="reorder-help" title="Ubah urutan FAQ" class="flex size-10 shrink-0 touch-none items-center justify-center rounded-lg text-[#60788D] hover:bg-sage focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital disabled:cursor-not-allowed disabled:opacity-50"><span class="admin-icon admin-icon-drag" aria-hidden="true"></span></button>
                         <div class="min-w-0">
                             <h2 class="text-sm font-medium leading-snug text-ink">{{ $faq->question }}</h2>
                             <p class="mt-1 line-clamp-1 whitespace-pre-line text-sm leading-relaxed text-[#52697B] xl:hidden">{{ $faq->short_answer }}</p>
                         </div>
                     </div>
-                    <span class="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold {{ $faq->is_active ? 'bg-[#E7F6EE] text-[#176247]' : 'bg-[#EBF0F4] text-[#52697B]' }}"><span aria-hidden="true" class="size-1.5 rounded-full bg-current"></span>{{ $faq->is_active ? 'Aktif' : 'Nonaktif' }}</span>
-                    <span class="text-sm text-[#52697B]"><span class="xl:hidden">Diperbarui </span>{{ $faq->updated_at->locale('id')->translatedFormat('d M Y, H:i') }}</span>
-                    <div class="flex flex-wrap items-center gap-2 border-t border-[#E2EDF3] pt-3 xl:border-t-0 xl:pt-0">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 pl-13 lg:col-span-1 xl:contents">
+                        <span class="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold {{ $faq->is_active ? 'bg-[#E7F6EE] text-[#176247]' : 'bg-[#EBF0F4] text-[#52697B]' }}"><span aria-hidden="true" class="size-1.5 rounded-full bg-current"></span>{{ $faq->is_active ? 'Aktif' : 'Nonaktif' }}</span>
+                        <span class="text-sm text-[#52697B]"><span class="xl:hidden">Diperbarui </span>{{ $faq->updated_at->locale('id')->translatedFormat('d M Y, H:i') }}</span>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-end gap-2 sm:justify-start sm:pl-13 lg:col-span-1 lg:justify-self-end lg:pl-0 xl:col-span-1 xl:flex-nowrap">
                         <a href="{{ route('admin.faqs.edit', $faq) }}" aria-label="Edit FAQ: {{ $faq->question }}" title="Edit FAQ" class="inline-flex size-10 items-center justify-center rounded-lg border border-[#D6E5EE] text-hospital hover:bg-sage focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital"><span class="admin-icon admin-icon-edit" aria-hidden="true"></span></a>
                         <a href="{{ route('admin.faqs.show', $faq) }}" aria-label="Pratinjau FAQ: {{ $faq->question }}" title="Pratinjau FAQ" class="inline-flex size-10 items-center justify-center rounded-lg border border-[#D6E5EE] text-hospital hover:bg-sage focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital"><span class="admin-icon admin-icon-preview" aria-hidden="true"></span></a>
                         <form action="{{ route('admin.faqs.status', $faq) }}" method="POST">
