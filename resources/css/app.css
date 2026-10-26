@@ -149,6 +149,16 @@ body {
     opacity: 0;
 }
 
+.faq-answer-content {
+    margin-left: 2.375rem;
+}
+
+@media (min-width: 640px) {
+    .faq-answer-content {
+        margin-left: 3rem;
+    }
+}
+
 @keyframes public-reveal {
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
@@ -234,6 +244,8 @@ body {
         height: 40px;
         font-size: 22px;
     }
+
+    .faq-answer-content { margin-left: calc(40px + 1rem); }
 
     .public-faq-toggle [data-faq-indicator] {
         width: 44px;

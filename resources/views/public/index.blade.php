@@ -42,12 +42,18 @@
                                 </button>
                             </h3>
                             <div id="faq-answer-{{ $faq->id }}" hidden data-faq-panel class="border-t border-[#DAEBF4] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
-                                <p data-faq-short-answer class="max-w-[75ch] whitespace-pre-line text-sm leading-[1.7] text-ink sm:text-base">{{ $faq->short_answer }}</p>
-                                @if ($faq->has_full_answer)
-                                    <a href="{{ route('public.faq.show', $faq->slug) }}" class="ui-press mt-5 inline-flex min-h-11 items-center rounded-xl bg-hospital px-4 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital">
-                                        Lihat Selengkapnya
-                                    </a>
-                                @endif
+                                <div class="faq-answer-content">
+                                    <div data-faq-short-answer class="max-w-[68ch] space-y-4 text-sm leading-[1.6] text-ink sm:text-base">
+                                        @foreach (preg_split('/\R(?:[ \t]*\R)+/u', trim($faq->short_answer)) as $paragraph)
+                                            <p class="whitespace-pre-line">{{ trim($paragraph) }}</p>
+                                        @endforeach
+                                    </div>
+                                    @if ($faq->has_full_answer)
+                                        <a href="{{ route('public.faq.show', $faq->slug) }}" class="ui-press mt-5 inline-flex min-h-11 items-center rounded-xl bg-hospital px-4 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital">
+                                            Lihat Selengkapnya
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
                         </article>
                     @endforeach
