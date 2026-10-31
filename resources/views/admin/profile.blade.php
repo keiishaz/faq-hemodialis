@@ -32,7 +32,10 @@
                 </div>
                 <div class="md:col-span-2">
                     <label for="profile-current-password" class="mb-2 block text-sm font-semibold text-ink">Password saat ini <span class="font-normal text-[#52697B]">(jika email diubah)</span></label>
-                    <input id="profile-current-password" name="current_password" type="password" autocomplete="current-password" aria-invalid="{{ $errors->profile->has('current_password') ? 'true' : 'false' }}" @if ($errors->profile->has('current_password')) aria-describedby="profile-current-password-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white px-4 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                    <div class="relative">
+                        <input id="profile-current-password" name="current_password" type="password" data-password-input autocomplete="current-password" aria-invalid="{{ $errors->profile->has('current_password') ? 'true' : 'false' }}" @if ($errors->profile->has('current_password')) aria-describedby="profile-current-password-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white py-2 pl-4 pr-14 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                        <button type="button" data-password-toggle aria-controls="profile-current-password" aria-label="Tampilkan password" aria-pressed="false" title="Tampilkan password" class="absolute top-1/2 right-1 flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital"><span aria-hidden="true" data-password-icon class="admin-icon admin-icon-preview"></span></button>
+                    </div>
                     @error('current_password', 'profile') <p id="profile-current-password-error" role="alert" class="mt-2 text-sm font-medium text-[#A52D38]">{{ $message }}</p> @enderror
                 </div>
                 </div>
@@ -58,19 +61,28 @@
                 <div class="grid gap-5 md:grid-cols-2">
                 <div class="md:col-span-2">
                     <label for="password-current" class="mb-2 block text-sm font-semibold text-ink">Password saat ini</label>
-                    <input id="password-current" name="current_password" type="password" autocomplete="current-password" required aria-invalid="{{ $errors->password->has('current_password') ? 'true' : 'false' }}" @if ($errors->password->has('current_password')) aria-describedby="password-current-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white px-4 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                    <div class="relative">
+                        <input id="password-current" name="current_password" type="password" data-password-input autocomplete="current-password" required aria-invalid="{{ $errors->password->has('current_password') ? 'true' : 'false' }}" @if ($errors->password->has('current_password')) aria-describedby="password-current-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white py-2 pl-4 pr-14 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                        <button type="button" data-password-toggle aria-controls="password-current" aria-label="Tampilkan password" aria-pressed="false" title="Tampilkan password" class="absolute top-1/2 right-1 flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital"><span aria-hidden="true" data-password-icon class="admin-icon admin-icon-preview"></span></button>
+                    </div>
                     @error('current_password', 'password') <p id="password-current-error" role="alert" class="mt-2 text-sm font-medium text-[#A52D38]">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label for="password-new" class="mb-2 block text-sm font-semibold text-ink">Password baru</label>
-                    <input id="password-new" name="password" type="password" autocomplete="new-password" minlength="12" required aria-invalid="{{ $errors->password->has('password') ? 'true' : 'false' }}" @if ($errors->password->has('password')) aria-describedby="password-new-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white px-4 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                    <div class="relative">
+                        <input id="password-new" name="password" type="password" data-password-input autocomplete="new-password" minlength="12" required aria-invalid="{{ $errors->password->has('password') ? 'true' : 'false' }}" @if ($errors->password->has('password')) aria-describedby="password-new-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white py-2 pl-4 pr-14 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                        <button type="button" data-password-toggle aria-controls="password-new" aria-label="Tampilkan password" aria-pressed="false" title="Tampilkan password" class="absolute top-1/2 right-1 flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital"><span aria-hidden="true" data-password-icon class="admin-icon admin-icon-preview"></span></button>
+                    </div>
                     @error('password', 'password') <p id="password-new-error" role="alert" class="mt-2 text-sm font-medium text-[#A52D38]">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label for="password-confirmation" class="mb-2 block text-sm font-semibold text-ink">Konfirmasi password baru</label>
-                    <input id="password-confirmation" name="password_confirmation" type="password" autocomplete="new-password" required aria-invalid="{{ $errors->password->has('password_confirmation') ? 'true' : 'false' }}" @if ($errors->password->has('password_confirmation')) aria-describedby="password-confirmation-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white px-4 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                    <div class="relative">
+                        <input id="password-confirmation" name="password_confirmation" type="password" data-password-input autocomplete="new-password" required aria-invalid="{{ $errors->password->has('password_confirmation') ? 'true' : 'false' }}" @if ($errors->password->has('password_confirmation')) aria-describedby="password-confirmation-error" @endif class="min-h-11 w-full rounded-lg border border-[#9FB8C9] bg-white py-2 pl-4 pr-14 text-base text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                        <button type="button" data-password-toggle aria-controls="password-confirmation" aria-label="Tampilkan password" aria-pressed="false" title="Tampilkan password" class="absolute top-1/2 right-1 flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital"><span aria-hidden="true" data-password-icon class="admin-icon admin-icon-preview"></span></button>
+                    </div>
                     @error('password_confirmation', 'password') <p id="password-confirmation-error" role="alert" class="mt-2 text-sm font-medium text-[#A52D38]">{{ $message }}</p> @enderror
                 </div>
                 </div>

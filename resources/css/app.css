@@ -137,7 +137,8 @@ body {
     display: none;
 }
 
-[data-login-password]::-ms-reveal {
+[data-login-password]::-ms-reveal,
+[data-password-input]::-ms-reveal {
     display: none;
 }
 

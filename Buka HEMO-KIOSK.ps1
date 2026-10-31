@@ -1,4 +1,4 @@
-param ([switch] $CheckPhp)
+param ([switch] $CheckPhp, [switch] $NoBrowser)
 
 $ErrorActionPreference = 'Stop'
 
@@ -6,6 +6,9 @@ $projectPath = $PSScriptRoot
 $serverUrl = 'http://localhost:8000'
 $readinessUrl = 'http://127.0.0.1:8000'
 $port = 8000
+$vitePort = 5173
+$viteReadinessUrl = "http://127.0.0.1:$vitePort/@vite/client"
+$viteHotFile = Join-Path $projectPath 'public\hot'
 
 function Get-LaragonRoots {
     $roots = @()
@@ -78,6 +81,27 @@ function Get-PhpExecutable {
     return $available | Sort-Object Version -Descending | Select-Object -First 1
 }
 
+function Get-NpmExecutable {
+    param ([string[]] $laragonRoots)
+
+    $paths = @(Get-Command npm.cmd -All -ErrorAction SilentlyContinue | ForEach-Object { $_.Source })
+
+    foreach ($root in $laragonRoots) {
+        $nodeDirectory = Join-Path $root 'bin\nodejs'
+
+        if (Test-Path -LiteralPath $nodeDirectory -PathType Container) {
+            $paths += @(Get-ChildItem -LiteralPath $nodeDirectory -Directory | ForEach-Object { Join-Path $_.FullName 'npm.cmd' })
+            $paths += (Join-Path $nodeDirectory 'npm.cmd')
+        }
+    }
+
+    if ($env:ProgramFiles) {
+        $paths += (Join-Path $env:ProgramFiles 'nodejs\npm.cmd')
+    }
+
+    return $paths | Where-Object { $_ -and (Test-Path -LiteralPath $_ -PathType Leaf) } | Select-Object -Unique -First 1
+}
+
 function Show-LaunchError {
     param ([string] $message)
 
@@ -96,6 +120,39 @@ function Test-AppReady {
         return $response.StatusCode -eq 200 -and $response.Content.Contains('HEMO-KIOSK')
     } catch {
         return $false
+    }
+}
+
+function Test-ViteReady {
+    if (-not (Test-Path -LiteralPath $viteHotFile -PathType Leaf)) {
+        return $false
+    }
+
+    $viteUrl = (Get-Content -LiteralPath $viteHotFile -Raw).Trim().TrimEnd('/')
+
+    if ($viteUrl -ne "http://127.0.0.1:$vitePort") {
+        return $false
+    }
+
+    try {
+        $response = Invoke-WebRequest -Uri $viteReadinessUrl -UseBasicParsing -TimeoutSec 2
+        return $response.StatusCode -eq 200
+    } catch {
+        return $false
+    }
+}
+
+function Test-PortListener {
+    param ([int] $port)
+
+    $client = [System.Net.Sockets.TcpClient]::new()
+
+    try {
+        return $client.ConnectAsync([System.Net.IPAddress]::Loopback, $port).Wait(1000) -and $client.Connected
+    } catch {
+        return $false
+    } finally {
+        $client.Dispose()
     }
 }
 
@@ -118,6 +175,14 @@ try {
         exit 0
     }
 
+    $npmExecutable = Get-NpmExecutable -laragonRoots $laragonRoots
+
+    if (-not $npmExecutable -or -not (Test-Path -LiteralPath (Join-Path $projectPath 'node_modules\vite\bin\vite.js') -PathType Leaf)) {
+        throw 'Node.js, npm, atau node_modules belum tersedia. Pasang Node.js lalu jalankan npm install satu kali di folder proyek.'
+    }
+
+    $env:Path = "$(Split-Path $npmExecutable -Parent);$env:Path"
+
     $laragonExecutable = $null
 
     foreach ($root in $laragonRoots) {
@@ -133,27 +198,35 @@ try {
         $laragonExecutable = Join-Path $laragonRoots[0] 'laragon.exe'
     }
 
-    $databaseListener = Get-NetTCPConnection -LocalPort 3306 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-
-    if (-not $databaseListener -and $laragonExecutable -and -not (Get-Process -Name laragon -ErrorAction SilentlyContinue)) {
-        Start-Process -FilePath $laragonExecutable
+    if (-not (Test-PortListener -port 3306) -and $laragonExecutable -and -not (Get-Process -Name laragon -ErrorAction SilentlyContinue)) {
+        Start-Process -FilePath $laragonExecutable -WindowStyle Hidden
     }
 
-    $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-
-    if (-not $listener) {
+    if (-not (Test-PortListener -port $port)) {
         $serverProcess = Start-Process -FilePath $phpExecutable -ArgumentList "artisan serve --host=127.0.0.1 --port=$port --tries=1" -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemo-kiosk-server.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemo-kiosk-server-error.log')
     }
 
-    $deadline = (Get-Date).AddSeconds(30)
+    if (-not (Test-ViteReady)) {
+        if (Test-PortListener -port $vitePort) {
+            throw "Port $vitePort sudah dipakai aplikasi lain. Tutup aplikasi tersebut lalu klik shortcut lagi."
+        }
+
+        $viteProcess = Start-Process -FilePath $npmExecutable -ArgumentList @('run', 'dev', '--', '--host', '127.0.0.1', '--port', "$vitePort", '--strictPort') -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemo-kiosk-vite.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemo-kiosk-vite-error.log')
+    }
+
+    $deadline = (Get-Date).AddSeconds(45)
 
     while ((Get-Date) -lt $deadline) {
-        if (Test-AppReady) {
+        if ((Test-AppReady) -and (Test-ViteReady)) {
             break
         }
 
         if ($serverProcess -and $serverProcess.HasExited) {
             throw 'Server gagal dijalankan. Periksa storage\logs\hemo-kiosk-server-error.log.'
+        }
+
+        if ($viteProcess -and $viteProcess.HasExited) {
+            throw 'Vite gagal dijalankan. Periksa storage\logs\hemo-kiosk-vite-error.log.'
         }
 
         Start-Sleep -Milliseconds 500
@@ -163,10 +236,16 @@ try {
         throw 'Aplikasi belum siap. Klik Start All di Laragon jika MySQL belum aktif, lalu klik shortcut lagi. Pastikan port 8000 tidak dipakai aplikasi lain. Detail server ada di storage\logs\hemo-kiosk-server-error.log.'
     }
 
-    Start-Process -FilePath $serverUrl
+    if (-not (Test-ViteReady)) {
+        throw 'Vite belum siap. Periksa storage\logs\hemo-kiosk-vite.log dan hemo-kiosk-vite-error.log.'
+    }
+
+    if (-not $NoBrowser) {
+        Start-Process -FilePath $serverUrl
+    }
 } catch {
-    if ($CheckPhp) {
-        [Console]::Error.WriteLine($_.Exception.Message)
+    if ($CheckPhp -or $NoBrowser) {
+        [Console]::Error.WriteLine("Baris $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)")
         exit 1
     }
 

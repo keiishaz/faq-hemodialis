@@ -57,10 +57,8 @@ if (fullscreenButton) {
 
 const adminLoginForm = document.querySelector('[data-admin-login-form]');
 
-if (adminLoginForm) {
-    const submitButton = adminLoginForm.querySelector('[data-login-submit]');
-    const passwordInput = adminLoginForm.querySelector('[data-login-password]');
-    const passwordToggle = adminLoginForm.querySelector('[data-password-toggle]');
+document.querySelectorAll('[data-password-toggle]').forEach((passwordToggle) => {
+    const passwordInput = document.getElementById(passwordToggle.getAttribute('aria-controls'));
     const passwordIcon = passwordToggle.querySelector('[data-password-icon]');
 
     passwordToggle.addEventListener('click', () => {
@@ -74,6 +72,10 @@ if (adminLoginForm) {
         passwordIcon.classList.toggle('admin-icon-preview', isVisible);
         passwordIcon.classList.toggle('admin-icon-hide', !isVisible);
     });
+});
+
+if (adminLoginForm) {
+    const submitButton = adminLoginForm.querySelector('[data-login-submit]');
 
     adminLoginForm.addEventListener('submit', () => {
         submitButton.disabled = true;
