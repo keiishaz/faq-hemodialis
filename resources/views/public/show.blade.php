@@ -6,7 +6,7 @@
             <a href="{{ route('public.index') }}" class="ui-press inline-flex min-h-11 items-center rounded-xl border border-white/70 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/15 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-white">
                 Kembali ke FAQ
             </a>
-            <h1 class="public-detail-title mt-6 max-w-4xl text-2xl font-semibold leading-tight tracking-tight sm:text-[2rem]">{{ $faq->question }}</h1>
+            <h1 class="public-detail-title mt-6 w-full text-justify text-2xl font-semibold leading-tight tracking-tight sm:text-[2rem]">{{ $faq->question }}</h1>
         </div>
     </div>
 
