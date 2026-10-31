@@ -12,7 +12,7 @@
 
     <div class="public-faq-container mx-auto max-w-4xl px-5 pb-16 sm:px-8 sm:pb-20">
         <article class="admin-panel relative -mt-8 rounded-2xl border border-[#D7E8F1] bg-white p-5 sm:-mt-10 sm:p-8">
-            <div class="faq-content public-detail-content max-w-3xl text-base leading-[1.75] text-ink sm:text-lg">
+            <div class="faq-content public-detail-content text-base leading-[1.75] text-ink sm:text-lg">
                 {!! $fullAnswer !!}
             </div>
         </article>

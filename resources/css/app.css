@@ -153,6 +153,12 @@ body {
     margin-left: 2.375rem;
 }
 
+[data-faq-short-answer],
+.public-detail-content {
+    text-align: justify;
+    overflow-wrap: break-word;
+}
+
 @media (min-width: 640px) {
     .faq-answer-content {
         margin-left: 3rem;

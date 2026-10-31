@@ -43,7 +43,7 @@
                             </h3>
                             <div id="faq-answer-{{ $faq->id }}" hidden data-faq-panel class="border-t border-[#DAEBF4] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
                                 <div class="faq-answer-content">
-                                    <div data-faq-short-answer class="max-w-[68ch] space-y-4 text-sm leading-[1.6] text-ink sm:text-base">
+                                    <div data-faq-short-answer class="space-y-4 text-sm leading-[1.6] text-ink sm:text-base">
                                         @foreach (preg_split('/\R(?:[ \t]*\R)+/u', trim($faq->short_answer)) as $paragraph)
                                             <p class="whitespace-pre-line">{{ trim($paragraph) }}</p>
                                         @endforeach
