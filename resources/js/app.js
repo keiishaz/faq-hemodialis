@@ -1,16 +1,23 @@
+const isEmbeddedFullscreenPage = window.frameElement?.hasAttribute('data-fullscreen-frame') ?? false;
+const fullscreenDocument = isEmbeddedFullscreenPage ? window.parent.document : document;
 const fullscreenButton = document.querySelector('[data-fullscreen-toggle]');
+
+if (isEmbeddedFullscreenPage) {
+    window.parent.history.replaceState(window.parent.history.state, '', window.location.href);
+    fullscreenDocument.title = document.title;
+}
 
 if (fullscreenButton) {
     const label = fullscreenButton.querySelector('[data-fullscreen-label]');
     const enterIcon = fullscreenButton.querySelector('[data-fullscreen-enter-icon]');
     const exitIcon = fullscreenButton.querySelector('[data-fullscreen-exit-icon]');
     const status = document.querySelector('[data-fullscreen-status]');
-    const canUseFullscreen = typeof document.documentElement.requestFullscreen === 'function'
-        && typeof document.exitFullscreen === 'function'
-        && document.fullscreenEnabled !== false;
+    const canUseFullscreen = typeof fullscreenDocument.documentElement.requestFullscreen === 'function'
+        && typeof fullscreenDocument.exitFullscreen === 'function'
+        && fullscreenDocument.fullscreenEnabled !== false;
 
     const updateFullscreenButton = () => {
-        const isFullscreen = Boolean(document.fullscreenElement);
+        const isFullscreen = Boolean(fullscreenDocument.fullscreenElement);
         const buttonLabel = isFullscreen ? 'Tutup fullscreen' : 'Layar penuh';
 
         fullscreenButton.disabled = !canUseFullscreen;
@@ -18,8 +25,8 @@ if (fullscreenButton) {
         fullscreenButton.setAttribute('aria-pressed', String(isFullscreen));
         fullscreenButton.title = canUseFullscreen ? buttonLabel : 'Layar penuh tidak tersedia di browser ini';
         label.textContent = canUseFullscreen ? buttonLabel : 'Fullscreen tidak tersedia';
-        enterIcon.hidden = isFullscreen;
-        exitIcon.hidden = !isFullscreen;
+        enterIcon.toggleAttribute('hidden', isFullscreen);
+        exitIcon.toggleAttribute('hidden', !isFullscreen);
     };
 
     fullscreenButton.addEventListener('click', async () => {
@@ -27,10 +34,10 @@ if (fullscreenButton) {
         fullscreenButton.disabled = true;
 
         try {
-            if (document.fullscreenElement) {
-                await document.exitFullscreen();
+            if (fullscreenDocument.fullscreenElement) {
+                await fullscreenDocument.exitFullscreen();
             } else {
-                await document.documentElement.requestFullscreen();
+                await fullscreenDocument.documentElement.requestFullscreen();
             }
         } catch {
             status.textContent = 'Browser tidak mengizinkan layar penuh. Coba klik tombol sekali lagi.';
@@ -40,7 +47,7 @@ if (fullscreenButton) {
         }
     });
 
-    document.addEventListener('fullscreenchange', () => {
+    fullscreenDocument.addEventListener('fullscreenchange', () => {
         status.hidden = true;
         updateFullscreenButton();
     });
@@ -160,7 +167,9 @@ if (publicPage) {
         timerId = null;
 
         if (publicPage.dataset.publicPageType !== 'list') {
-            window.location.replace(publicPage.dataset.publicIndexUrl);
+            if (!navigateInFullscreen(publicPage.dataset.publicIndexUrl)) {
+                window.location.replace(publicPage.dataset.publicIndexUrl);
+            }
             return;
         }
 
@@ -177,7 +186,7 @@ if (publicPage) {
     };
 
     const checkIdle = () => {
-        if (isReset) {
+        if (isReset || document.querySelector('[data-fullscreen-frame]')) {
             return;
         }
 
@@ -324,6 +333,17 @@ if (faqForm) {
         }
     });
 
+    document.addEventListener('fullscreennavigation', (event) => {
+        if (!submitted && hasChanges()) {
+            if (!window.confirm('Perubahan belum disimpan. Pindah ke halaman lain?')) {
+                event.preventDefault();
+                return;
+            }
+
+            submitted = true;
+        }
+    });
+
     window.addEventListener('beforeunload', (event) => {
         if (!submitted && hasChanges()) {
             event.preventDefault();
@@ -398,7 +418,9 @@ if (reorderList) {
             });
 
             if (response.status === 401 || response.status === 419) {
-                window.location.assign(reorderList.dataset.loginUrl);
+                if (!navigateInFullscreen(reorderList.dataset.loginUrl)) {
+                    window.location.assign(reorderList.dataset.loginUrl);
+                }
                 return;
             }
 
@@ -422,7 +444,11 @@ if (reorderList) {
         }
     };
 
-    reloadButton.addEventListener('click', () => window.location.reload());
+    reloadButton.addEventListener('click', () => {
+        if (!navigateInFullscreen(window.location.href)) {
+            window.location.reload();
+        }
+    });
 
     handles.forEach((handle) => {
         const item = handle.closest('[data-sort-item]');
@@ -492,3 +518,100 @@ if (reorderList) {
         handle.addEventListener('pointercancel', () => endDrag(false));
     });
 }
+
+let fullscreenFrameSequence = 0;
+
+function createFullscreenFrame() {
+    const previousFrame = document.querySelector('[data-fullscreen-frame][data-fullscreen-active]');
+    const frame = document.createElement('iframe');
+    fullscreenFrameSequence += 1;
+    frame.name = `hemo-kiosk-fullscreen-frame-${fullscreenFrameSequence}`;
+    frame.title = 'Halaman HEMO-KIOSK';
+    frame.className = 'fullscreen-frame';
+    frame.setAttribute('data-fullscreen-frame', '');
+    frame.setAttribute('allowfullscreen', '');
+    frame.style.visibility = 'hidden';
+    frame.addEventListener('load', () => {
+        if (frame.contentWindow?.location.href === 'about:blank') {
+            return;
+        }
+
+        previousFrame?.remove();
+        frame.setAttribute('data-fullscreen-active', '');
+        document.body.classList.add('fullscreen-shell');
+        frame.style.visibility = 'visible';
+        frame.focus();
+    });
+    document.body.appendChild(frame);
+
+    return frame;
+}
+
+function prepareFullscreenFrame() {
+    if (!fullscreenDocument.fullscreenElement) {
+        return null;
+    }
+
+    if (!document.dispatchEvent(new Event('fullscreennavigation', { cancelable: true }))) {
+        return null;
+    }
+
+    return isEmbeddedFullscreenPage
+        ? window.parent.hemoCreateFullscreenFrame()
+        : createFullscreenFrame();
+}
+
+function navigateInFullscreen(url) {
+    const frame = prepareFullscreenFrame();
+    if (!frame) {
+        return false;
+    }
+
+    frame.src = url;
+    return true;
+}
+
+if (!isEmbeddedFullscreenPage) {
+    window.hemoCreateFullscreenFrame = createFullscreenFrame;
+}
+
+document.addEventListener('click', (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+        return;
+    }
+
+    const link = event.target.closest('a[href]');
+    if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) {
+        return;
+    }
+
+    const destination = new URL(link.href);
+    if (destination.origin !== window.location.origin
+        || (destination.pathname === window.location.pathname
+            && destination.search === window.location.search && destination.hash)) {
+        return;
+    }
+
+    if (navigateInFullscreen(destination.href)) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener('submit', (event) => {
+    const form = event.target;
+    const destination = new URL(form.action);
+    const target = event.submitter?.formTarget || form.target;
+
+    if (event.defaultPrevented || form.method === 'dialog' || (target && target !== '_self')
+        || destination.origin !== window.location.origin || !fullscreenDocument.fullscreenElement) {
+        return;
+    }
+
+    const frame = prepareFullscreenFrame();
+    if (!frame) {
+        event.preventDefault();
+        return;
+    }
+
+    form.target = frame.name;
+});
