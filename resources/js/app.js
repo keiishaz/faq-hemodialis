@@ -1,3 +1,53 @@
+const fullscreenButton = document.querySelector('[data-fullscreen-toggle]');
+
+if (fullscreenButton) {
+    const label = fullscreenButton.querySelector('[data-fullscreen-label]');
+    const enterIcon = fullscreenButton.querySelector('[data-fullscreen-enter-icon]');
+    const exitIcon = fullscreenButton.querySelector('[data-fullscreen-exit-icon]');
+    const status = document.querySelector('[data-fullscreen-status]');
+    const canUseFullscreen = typeof document.documentElement.requestFullscreen === 'function'
+        && typeof document.exitFullscreen === 'function'
+        && document.fullscreenEnabled !== false;
+
+    const updateFullscreenButton = () => {
+        const isFullscreen = Boolean(document.fullscreenElement);
+        const buttonLabel = isFullscreen ? 'Tutup fullscreen' : 'Layar penuh';
+
+        fullscreenButton.disabled = !canUseFullscreen;
+        fullscreenButton.setAttribute('aria-label', canUseFullscreen ? buttonLabel : 'Fullscreen tidak tersedia');
+        fullscreenButton.setAttribute('aria-pressed', String(isFullscreen));
+        fullscreenButton.title = canUseFullscreen ? buttonLabel : 'Layar penuh tidak tersedia di browser ini';
+        label.textContent = canUseFullscreen ? buttonLabel : 'Fullscreen tidak tersedia';
+        enterIcon.hidden = isFullscreen;
+        exitIcon.hidden = !isFullscreen;
+    };
+
+    fullscreenButton.addEventListener('click', async () => {
+        status.hidden = true;
+        fullscreenButton.disabled = true;
+
+        try {
+            if (document.fullscreenElement) {
+                await document.exitFullscreen();
+            } else {
+                await document.documentElement.requestFullscreen();
+            }
+        } catch {
+            status.textContent = 'Browser tidak mengizinkan layar penuh. Coba klik tombol sekali lagi.';
+            status.hidden = false;
+        } finally {
+            updateFullscreenButton();
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        status.hidden = true;
+        updateFullscreenButton();
+    });
+    window.addEventListener('pageshow', updateFullscreenButton);
+    updateFullscreenButton();
+}
+
 const adminLoginForm = document.querySelector('[data-admin-login-form]');
 
 if (adminLoginForm) {

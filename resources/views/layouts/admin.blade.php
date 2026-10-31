@@ -7,7 +7,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-dvh bg-paper font-sans text-ink antialiased">
-        <a href="#konten-utama" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-hospital focus:px-4 focus:py-3 focus:font-semibold focus:text-white">Lewati ke konten utama</a>
+        <a href="#konten-utama" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-xl focus:bg-hospital focus:px-4 focus:py-3 focus:font-semibold focus:text-white">Lewati ke konten utama</a>
         <div class="min-h-dvh md:grid md:grid-cols-[216px_minmax(0,1fr)]">
             <aside class="hidden border-r border-[#D8E6EF] bg-white px-4 py-5 md:sticky md:top-0 md:flex md:h-dvh md:flex-col">
                 <a href="{{ route('admin.dashboard') }}" class="rounded-lg focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital">
@@ -49,34 +49,35 @@
             </aside>
 
             <div class="min-w-0">
-                <header class="border-b border-[#D8E6EF] bg-white">
+                <header class="sticky top-0 z-50 border-b border-[#D8E6EF] bg-white">
                     <div class="mx-auto flex min-h-16 w-full max-w-[1440px] items-center justify-between gap-2 px-5 sm:px-7 lg:gap-4 lg:px-8">
                         <a href="{{ route('admin.dashboard') }}" class="flex min-w-0 items-center gap-2 text-hospital-deep md:hidden">
                             <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="36" height="36" class="size-9 shrink-0 object-contain">
                             <span class="min-w-0 leading-tight">
                                 <span class="block text-sm font-semibold">{{ config('app.name') }}</span>
-                                <span class="block text-[10px] text-[#547186] sm:text-xs">{{ config('hospital.name') }}</span>
+                                <span class="hidden text-[10px] text-[#547186] min-[400px]:block sm:text-xs">{{ config('hospital.name') }}</span>
                             </span>
                         </a>
-                        <div class="flex shrink-0 items-center gap-1 md:hidden" aria-label="Logo mitra">
-                            <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="28" height="28" class="size-7 object-contain">
-                            <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="28" height="28" class="institution-logo-poltek size-7 object-contain">
-                        </div>
                         <div class="hidden items-center gap-3 text-sm md:flex">
                             <span class="text-[#547186]">Ruang admin</span>
                             <span aria-hidden="true" class="text-[#7E9AAE]">›</span>
                             <span class="font-semibold text-hospital-deep">{{ request()->routeIs('admin.dashboard') ? 'Dashboard' : (request()->routeIs('admin.profile.*') ? 'Profil' : 'FAQ') }}</span>
                         </div>
-                        <div class="hidden items-center gap-3 md:flex">
-                            <span aria-hidden="true" class="flex size-8 items-center justify-center rounded-full bg-sage text-xs font-semibold text-hospital">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
-                            <span class="max-w-48 truncate text-sm font-medium text-hospital-deep">{{ auth()->user()->name }}</span>
+                        <div class="flex shrink-0 items-center gap-1 sm:gap-2">
+                            @include('layouts.fullscreen-toggle')
+                            <div class="flex items-center gap-1 md:hidden" aria-label="Logo mitra">
+                                <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="28" height="28" class="size-7 object-contain">
+                                <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="28" height="28" class="institution-logo-poltek size-7 object-contain">
+                            </div>
+                            <div class="hidden items-center gap-3 md:flex">
+                                <span aria-hidden="true" class="flex size-8 items-center justify-center rounded-full bg-sage text-xs font-semibold text-hospital">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
+                                <span class="max-w-48 truncate text-sm font-medium text-hospital-deep">{{ auth()->user()->name }}</span>
+                            </div>
+                            <form action="{{ route('admin.logout') }}" method="POST" class="hidden sm:block md:hidden">
+                                @csrf
+                                <button type="submit" aria-label="Keluar" class="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-[#D58B87] bg-white px-2 font-medium text-[#B42335] transition-colors hover:bg-[#FFF0F1] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#B42335]"><span class="admin-icon admin-icon-logout" aria-hidden="true"></span></button>
+                            </form>
                         </div>
-                        <form action="{{ route('admin.logout') }}" method="POST" class="md:hidden">
-                            @csrf
-                            <button type="submit" aria-label="Keluar" class="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl border border-[#D58B87] bg-white px-2 font-medium text-[#B42335] transition-colors hover:bg-[#FFF0F1] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#B42335] sm:px-3">
-                                <span class="admin-icon admin-icon-logout" aria-hidden="true"></span><span class="hidden sm:inline">Keluar</span>
-                            </button>
-                        </form>
                     </div>
                 </header>
 
@@ -90,6 +91,10 @@
                         <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.dashboard') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-dashboard" aria-hidden="true"></span>Dashboard</a>
                         <a href="{{ route('admin.faqs.index') }}" @if (request()->routeIs('admin.faqs.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.faqs.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>FAQ</a>
                         <a href="{{ route('admin.profile.edit') }}" @if (request()->routeIs('admin.profile.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.profile.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-profile" aria-hidden="true"></span>Profil</a>
+                        <form action="{{ route('admin.logout') }}" method="POST" class="border-t border-[#D8E6EF] pt-2 sm:hidden">
+                            @csrf
+                            <button type="submit" class="flex min-h-12 w-full items-center gap-3 rounded-xl px-4 text-left font-medium text-[#B42335] hover:bg-[#FFF0F1] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#B42335]"><span class="admin-icon admin-icon-logout" aria-hidden="true"></span>Keluar</button>
+                        </form>
                     </nav>
                 </details>
 

@@ -21,6 +21,30 @@ body {
     overflow-x: clip;
 }
 
+#konten-utama {
+    scroll-margin-top: 6rem;
+}
+
+.fullscreen-status {
+    position: absolute;
+    z-index: 60;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: max-content;
+    max-width: min(20rem, calc(100vw - 2rem));
+    border: 1px solid #B6D8E8;
+    border-radius: 0.75rem;
+    background: white;
+    padding: 0.625rem 0.875rem;
+    color: #16466D;
+    box-shadow: 0 8px 24px rgb(21 83 125 / 14%);
+}
+
+.fullscreen-status[hidden],
+[data-fullscreen-exit-icon][hidden] {
+    display: none;
+}
+
 .institution-logo-poltek {
     transform: scale(0.82);
 }
