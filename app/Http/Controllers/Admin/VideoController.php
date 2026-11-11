@@ -16,7 +16,7 @@ class VideoController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
         $status = (string) $request->query('status', 'all');
-        $status = in_array($status, ['all', 'active', 'inactive', 'ready', 'draft'], true) ? $status : 'all';
+        $status = in_array($status, ['all', 'active', 'inactive', 'ready'], true) ? $status : 'all';
 
         $videos = Video::query()
             ->when($search !== '', fn ($query) => $query->where(function ($query) use ($search): void {
@@ -28,7 +28,6 @@ class VideoController extends Controller
             ->when($status === 'active', fn ($query) => $query->where('is_active', true))
             ->when($status === 'inactive', fn ($query) => $query->where('is_active', false))
             ->when($status === 'ready', fn ($query) => $query->whereNotNull('youtube_url')->where('youtube_url', '!=', ''))
-            ->when($status === 'draft', fn ($query) => $query->where(fn ($query) => $query->whereNull('youtube_url')->orWhere('youtube_url', '')))
             ->ordered()
             ->get();
 

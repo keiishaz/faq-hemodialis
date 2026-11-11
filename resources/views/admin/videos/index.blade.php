@@ -60,7 +60,7 @@
                 <button type="submit" aria-label="Cari video" class="absolute inset-y-0 left-0 flex w-11 items-center justify-center rounded-l-lg text-hospital hover:bg-sage focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-hospital"><span class="admin-icon admin-icon-search" aria-hidden="true"></span></button>
             </form>
             <nav aria-label="Filter status video" class="flex shrink-0 flex-wrap gap-1 rounded-lg bg-paper p-1">
-                @foreach (['all' => 'Semua', 'ready' => 'Siap', 'draft' => 'Belum ada link', 'inactive' => 'Disembunyikan'] as $value => $label)
+                @foreach (['all' => 'Semua', 'ready' => 'Siap', 'inactive' => 'Disembunyikan'] as $value => $label)
                     <a href="{{ route('admin.videos.index', array_filter(['status' => $value === 'all' ? null : $value, 'search' => $search === '' ? null : $search])) }}" @if ($status === $value) aria-current="page" @endif class="inline-flex min-h-10 items-center rounded-md px-3 text-sm font-medium focus-visible:outline-3 focus-visible:outline-hospital sm:px-4 {{ $status === $value ? 'bg-hospital font-semibold text-white' : 'text-[#52697B] hover:bg-sage' }}">{{ $label }}</a>
                 @endforeach
             </nav>
