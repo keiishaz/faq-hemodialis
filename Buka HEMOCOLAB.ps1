@@ -255,7 +255,11 @@ try {
 
     # --- php artisan serve ------------------------------------------------
     if (Uji-Port -port $serverPort) {
-        Tulis-Log "Port $serverPort sudah melayani permintaan, server aplikasi tidak dijalankan ulang."
+        if (Uji-ServerAplikasi) {
+            Tulis-Log "Port $serverPort sudah melayani aplikasi, server tidak dijalankan ulang."
+        } else {
+            throw "Port $serverPort sudah dipakai aplikasi lain. Tutup aplikasi tersebut, lalu jalankan HEMOCOLAB kembali."
+        }
     } else {
         Tulis-Log "Menjalankan: php artisan serve --port=$serverPort"
 
