@@ -72,4 +72,21 @@
             </div>
         </div>
     @endif
+    @if (($videoCount ?? 0) > 0)
+        <section class="mx-auto max-w-4xl px-5 pb-16 sm:px-8 sm:pb-20" aria-label="Video edukasi">
+            <div class="flex flex-col gap-4 rounded-2xl border border-[#CFE3EE] bg-white p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
+                <div class="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#0867B2] to-[#10A7D0] text-white">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 size-6"><path d="M8 5.14v13.72a1 1 0 0 0 1.55.83l10.2-6.86a1 1 0 0 0 0-1.66L9.55 4.31A1 1 0 0 0 8 5.14Z" /></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h2 class="text-lg font-semibold leading-snug text-hospital-deep">Tonton video edukasi</h2>
+                    <p class="mt-1 text-sm leading-relaxed text-[#52697B]">{{ $videoCount }} video edukasi tentang hipertensi, diabetes, batu ginjal, dan hemodialisis — disusun oleh mahasiswa Promosi Kesehatan Poltekkes Kemenkes Bengkulu.</p>
+                </div>
+                <a href="{{ route('public.videos.index') }}" class="ui-press inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-hospital px-5 text-sm font-semibold text-white transition-colors hover:bg-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital">
+                    Buka daftar video
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-4"><path d="m9 6 6 6-6 6" /></svg>
+                </a>
+            </div>
+        </section>
+    @endif
 @endsection

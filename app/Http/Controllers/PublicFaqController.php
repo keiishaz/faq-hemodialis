@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\FaqFullAnswerSanitizer;
 use App\Models\Faq;
+use App\Models\Video;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 
@@ -17,7 +18,10 @@ class PublicFaqController extends Controller
             $faq->setAttribute('has_full_answer', $sanitizer->sanitize($faq->full_answer) !== null);
         });
 
-        return view('public.index', compact('faqs'));
+        return view('public.index', [
+            'faqs' => $faqs,
+            'videoCount' => Video::query()->active()->count(),
+        ]);
     }
 
     public function show(Faq $faq, FaqFullAnswerSanitizer $sanitizer): View|Response

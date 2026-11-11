@@ -19,6 +19,10 @@
                         </span>
                     </a>
                     <div class="flex shrink-0 items-center gap-1 sm:gap-3">
+                        <a href="{{ route('public.videos.index') }}" @if (request()->routeIs('public.videos.*')) aria-current="page" @endif class="public-nav-video inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold transition-colors focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital {{ request()->routeIs('public.videos.*') ? 'bg-sage text-hospital-deep' : 'text-hospital-deep hover:bg-sage' }}">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" class="size-4"><path d="M8 5.14v13.72a1 1 0 0 0 1.55.83l10.2-6.86a1 1 0 0 0 0-1.66L9.55 4.31A1 1 0 0 0 8 5.14Z" /></svg>
+                            <span class="hidden min-[380px]:inline">Video</span>
+                        </a>
                         @include('layouts.fullscreen-toggle')
                         <div class="flex items-center gap-1 border-l border-[#D8E6EF] pl-2 sm:gap-3 sm:pl-4" aria-label="Logo mitra">
                             <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="40" height="40" class="public-partner-logo size-7 object-contain sm:size-10">

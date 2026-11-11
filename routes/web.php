@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\AdminSessionController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FaqReorderController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\PublicFaqController;
+use App\Http\Controllers\PublicVideoController;
 use App\Http\Middleware\PreventAdminCache;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +15,11 @@ Route::get('/', [PublicFaqController::class, 'index'])->name('public.index');
 Route::get('/faq/{faq:slug}', [PublicFaqController::class, 'show'])
     ->missing(fn () => response()->view('public.not-found', [], 404))
     ->name('public.faq.show');
+
+Route::get('/video', [PublicVideoController::class, 'index'])->name('public.videos.index');
+Route::get('/video/{video:slug}', [PublicVideoController::class, 'show'])
+    ->missing(fn () => response()->view('public.not-found', [], 404))
+    ->name('public.videos.show');
 
 Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::middleware('guest')->group(function (): void {
@@ -34,6 +41,13 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::put('/faqs/{faq}', [FaqController::class, 'update'])->whereNumber('faq')->missing(fn () => to_route('admin.faqs.index')->with('error', 'FAQ tidak ditemukan. Daftar telah dimuat ulang.'))->name('faqs.update');
         Route::patch('/faqs/{faq}/status', [FaqController::class, 'toggle'])->whereNumber('faq')->missing(fn () => to_route('admin.faqs.index')->with('error', 'FAQ tidak ditemukan. Daftar telah dimuat ulang.'))->name('faqs.status');
         Route::delete('/faqs/{faq}', [FaqController::class, 'destroy'])->whereNumber('faq')->missing(fn () => to_route('admin.faqs.index')->with('error', 'FAQ tidak ditemukan. Daftar telah dimuat ulang.'))->name('faqs.destroy');
+        Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
+        Route::get('/videos/create', [VideoController::class, 'create'])->name('videos.create');
+        Route::post('/videos', [VideoController::class, 'store'])->name('videos.store');
+        Route::get('/videos/{video}/edit', [VideoController::class, 'edit'])->whereNumber('video')->name('videos.edit');
+        Route::put('/videos/{video}', [VideoController::class, 'update'])->whereNumber('video')->name('videos.update');
+        Route::patch('/videos/{video}/status', [VideoController::class, 'toggle'])->whereNumber('video')->name('videos.toggle');
+        Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->whereNumber('video')->name('videos.destroy');
         Route::post('/logout', [AdminSessionController::class, 'destroy'])->name('logout');
     });
 });
