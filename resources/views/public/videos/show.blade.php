@@ -17,35 +17,22 @@
         <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
             <div class="min-w-0">
                 <div class="overflow-hidden rounded-2xl border border-[#123A54] bg-[#061B2A] shadow-[0_18px_40px_rgb(6_27_42_/_22%)]">
-                    @if ($video->embedUrl())
-                        <div class="relative aspect-video">
-                            <iframe
-                                src="{{ $video->embedUrl() }}"
-                                title="Video edukasi: {{ $video->judul }}"
-                                class="absolute inset-0 size-full"
-                                loading="lazy"
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen></iframe>
-                        </div>
-                    @else
-                        <div class="relative flex aspect-video flex-col items-center justify-center gap-3 px-6 text-center">
-                            <span aria-hidden="true" class="absolute inset-0 opacity-[0.13]" style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);background-size:16px 16px;"></span>
-                            <span class="flex size-14 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="size-6"><circle cx="12" cy="12" r="8.5" /><path d="M12 8v4.5l3 1.8" /></svg>
-                            </span>
-                            <p class="text-base font-semibold text-white">Video belum tersedia</p>
-                            <p class="max-w-md text-sm leading-relaxed text-[#B9D7E8]">Judul ini sudah terdaftar, tetapi tautan videonya belum diunggah. Silakan periksa kembali nanti atau tonton video lain yang sudah tersedia.</p>
-                        </div>
-                    @endif
+                    <div class="relative aspect-video">
+                        <iframe
+                            src="{{ $video->embedUrl() }}"
+                            title="Video edukasi: {{ $video->judul }}"
+                            class="absolute inset-0 size-full"
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
+                    </div>
                 </div>
 
-                @if ($video->hasVideo())
-                    <p class="mt-3 flex items-start gap-2 rounded-xl border border-[#D7E8F1] bg-white px-4 py-3 text-sm leading-relaxed text-[#52697B]">
+                <p class="mt-3 flex items-start gap-2 rounded-xl border border-[#D7E8F1] bg-white px-4 py-3 text-sm leading-relaxed text-[#52697B]">
                         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="mt-0.5 size-4 shrink-0 text-hospital"><circle cx="12" cy="12" r="9" /><path d="M12 11v5" /><path d="M12 7.6v.8" /></svg>
                         <span>Pemutar tidak menampilkan gambar? Pastikan koneksi stabil, lalu klik tombol <span class="font-semibold text-hospital-deep">Buka di YouTube</span> di bawah. Sebagian video dibatasi pemiliknya agar tidak bisa diputar di situs lain.</span>
-                    </p>
-                @endif
+                </p>
 
                 <div class="mt-6">
                     <div class="flex flex-wrap items-center gap-2">
@@ -56,10 +43,6 @@
                                 {{ $video->durasi }}
                             </span>
                         @endif
-                        <span class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold {{ $video->hasVideo() ? 'bg-[#E7F6EC] text-[#1B7A4B]' : 'bg-[#FBF3DC] text-[#8A6D1F]' }}">
-                            <span aria-hidden="true" class="size-1.5 rounded-full {{ $video->hasVideo() ? 'bg-[#1B7A4B]' : 'bg-[#C9A227]' }}"></span>
-                            {{ $video->hasVideo() ? 'Siap ditonton' : 'Menunggu unggahan' }}
-                        </span>
                     </div>
 
                     <h1 class="mt-3 text-[1.6rem] font-semibold leading-snug tracking-tight text-hospital-deep sm:text-[2rem]">{{ $video->judul }}</h1>

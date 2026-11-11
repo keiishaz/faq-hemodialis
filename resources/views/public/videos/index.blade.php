@@ -12,16 +12,12 @@
                 Kumpulan video edukasi singkat yang disusun oleh mahasiswa Program Studi Promosi Kesehatan Kelas 3A, Poltekkes Kemenkes Bengkulu, bekerja sama dengan RSUD Dr. M. Yunus Bengkulu.
             </p>
 
-            <dl class="mx-auto mt-7 grid max-w-xl grid-cols-3 gap-2 text-center sm:gap-4">
-                <div class="rounded-xl border border-white/20 bg-white/10 px-2 py-3">
-                    <dt class="text-[11px] font-medium tracking-wide uppercase text-[#D6EEFB]">Judul video</dt>
+            <dl class="mx-auto mt-7 grid max-w-md grid-cols-2 gap-3 text-center sm:gap-4">
+                <div class="rounded-xl border border-white/20 bg-white/10 px-3 py-3">
+                    <dt class="text-[11px] font-medium tracking-wide uppercase text-[#D6EEFB]">Video tersedia</dt>
                     <dd class="mt-1 text-2xl font-semibold">{{ $total }}</dd>
                 </div>
-                <div class="rounded-xl border border-white/20 bg-white/10 px-2 py-3">
-                    <dt class="text-[11px] font-medium tracking-wide uppercase text-[#D6EEFB]">Siap ditonton</dt>
-                    <dd class="mt-1 text-2xl font-semibold">{{ $tersedia }}</dd>
-                </div>
-                <div class="rounded-xl border border-white/20 bg-white/10 px-2 py-3">
+                <div class="rounded-xl border border-white/20 bg-white/10 px-3 py-3">
                     <dt class="text-[11px] font-medium tracking-wide uppercase text-[#D6EEFB]">Topik</dt>
                     <dd class="mt-1 text-2xl font-semibold">{{ $kategoris->count() }}</dd>
                 </div>
@@ -45,19 +41,21 @@
                 </div>
             </form>
 
-            <nav aria-label="Filter topik" class="mt-4 flex flex-wrap gap-2">
-                <a href="{{ route('public.videos.index', $search === '' ? [] : ['q' => $search]) }}" @if ($kategoriAktif === '') aria-current="page" @endif class="inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors {{ $kategoriAktif === '' ? 'border-hospital bg-hospital text-white' : 'border-[#BBD6E5] bg-white text-hospital-deep hover:bg-sage' }}">Semua topik</a>
-                @foreach ($kategoris as $kategori)
-                    <a href="{{ route('public.videos.index', array_filter(['kategori' => $kategori, 'q' => $search === '' ? null : $search])) }}" @if ($kategoriAktif === $kategori) aria-current="page" @endif class="inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors {{ $kategoriAktif === $kategori ? 'border-hospital bg-hospital text-white' : 'border-[#BBD6E5] bg-white text-hospital-deep hover:bg-sage' }}">{{ $kategori }}</a>
-                @endforeach
-            </nav>
+            @if ($kategoris->isNotEmpty())
+                <nav aria-label="Filter topik" class="mt-4 flex flex-wrap gap-2">
+                    <a href="{{ route('public.videos.index', $search === '' ? [] : ['q' => $search]) }}" @if ($kategoriAktif === '') aria-current="page" @endif class="inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors {{ $kategoriAktif === '' ? 'border-hospital bg-hospital text-white' : 'border-[#BBD6E5] bg-white text-hospital-deep hover:bg-sage' }}">Semua topik</a>
+                    @foreach ($kategoris as $kategori)
+                        <a href="{{ route('public.videos.index', array_filter(['kategori' => $kategori, 'q' => $search === '' ? null : $search])) }}" @if ($kategoriAktif === $kategori) aria-current="page" @endif class="inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors {{ $kategoriAktif === $kategori ? 'border-hospital bg-hospital text-white' : 'border-[#BBD6E5] bg-white text-hospital-deep hover:bg-sage' }}">{{ $kategori }}</a>
+                    @endforeach
+                </nav>
+            @endif
         </div>
 
         <div class="mt-9 flex flex-wrap items-baseline justify-between gap-2 border-l-4 border-hospital pl-4">
             <h2 class="text-xl font-medium tracking-tight text-hospital-deep sm:text-2xl">
                 {{ $kategoriAktif === '' ? 'Semua video edukasi' : $kategoriAktif }}
             </h2>
-            <p class="text-sm text-[#52697B]">{{ $videos->count() }} video ditemukan</p>
+            <p class="text-sm text-[#52697B]">{{ $videos->count() }} video</p>
         </div>
 
         @if ($videos->isEmpty())
@@ -73,13 +71,8 @@
                 @foreach ($videos as $video)
                     <article class="group flex flex-col overflow-hidden rounded-2xl border border-[#D7E8F1] bg-white shadow-[0_2px_10px_rgb(21_83_125_/_6%)] transition duration-200 hover:-translate-y-0.5 hover:border-[#B6D8E8] hover:shadow-[0_14px_30px_rgb(21_83_125_/_13%)]">
                         <a href="{{ route('public.videos.show', $video) }}" class="relative block aspect-video overflow-hidden bg-[#0C2E45]" aria-label="Tonton {{ $video->judul }}">
-                            @if ($video->thumbnailUrl())
-                                <img src="{{ $video->thumbnailUrl() }}" alt="Pratinjau video: {{ $video->judul }}" loading="lazy" class="size-full object-cover transition duration-300 group-hover:scale-[1.04]">
-                                <span aria-hidden="true" class="absolute inset-0 bg-gradient-to-t from-[#061B2A]/70 via-[#061B2A]/10 to-transparent"></span>
-                            @else
-                                <span aria-hidden="true" class="absolute inset-0 bg-gradient-to-br from-[#0B3F63] via-[#0C2E45] to-[#08243A]"></span>
-                                <span aria-hidden="true" class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);background-size:14px 14px;"></span>
-                            @endif
+                            <img src="{{ $video->thumbnailUrl() }}" alt="Pratinjau video: {{ $video->judul }}" loading="lazy" class="size-full object-cover transition duration-300 group-hover:scale-[1.04]">
+                            <span aria-hidden="true" class="absolute inset-0 bg-gradient-to-t from-[#061B2A]/70 via-[#061B2A]/10 to-transparent"></span>
 
                             <span class="absolute top-2.5 left-2.5 inline-flex max-w-[80%] items-center rounded-md bg-white/95 px-2 py-0.5 text-[11px] font-semibold text-hospital-deep">{{ $video->kategori }}</span>
 
@@ -92,10 +85,6 @@
                             @if ($video->durasi)
                                 <span class="absolute right-2.5 bottom-2.5 rounded bg-[#061B2A]/85 px-1.5 py-0.5 text-[11px] font-medium text-white">{{ $video->durasi }}</span>
                             @endif
-
-                            @unless ($video->hasVideo())
-                                <span class="absolute top-2.5 right-2.5 rounded-md bg-[#061B2A]/85 px-2 py-0.5 text-[11px] font-semibold text-[#FFE39B]">Segera hadir</span>
-                            @endunless
                         </a>
 
                         <div class="flex flex-1 flex-col p-4">
@@ -108,13 +97,9 @@
                                     <span class="min-w-0">{{ $video->pembicara }}</span>
                                 </p>
                             @endif
-                            <div class="mt-auto flex items-center justify-between gap-2 pt-4">
-                                <span class="inline-flex items-center gap-1.5 text-xs font-medium {{ $video->hasVideo() ? 'text-[#1B7A4B]' : 'text-[#8A6D1F]' }}">
-                                    <span aria-hidden="true" class="size-1.5 rounded-full {{ $video->hasVideo() ? 'bg-[#1B7A4B]' : 'bg-[#C9A227]' }}"></span>
-                                    {{ $video->hasVideo() ? 'Siap ditonton' : 'Menunggu unggahan' }}
-                                </span>
-                                <a href="{{ route('public.videos.show', $video) }}" class="inline-flex min-h-8 items-center gap-1 rounded-lg px-2 text-sm font-semibold text-hospital transition-colors hover:bg-sage focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
-                                    {{ $video->hasVideo() ? 'Tonton' : 'Detail' }}
+                            <div class="mt-auto pt-4">
+                                <a href="{{ route('public.videos.show', $video) }}" class="inline-flex min-h-9 items-center gap-1 rounded-lg text-sm font-semibold text-hospital transition-colors hover:text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital">
+                                    Tonton video
                                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-4"><path d="m9 6 6 6-6 6" /></svg>
                                 </a>
                             </div>

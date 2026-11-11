@@ -20,7 +20,7 @@ class PublicFaqController extends Controller
 
         return view('public.index', [
             'faqs' => $faqs,
-            'videoCount' => Video::query()->active()->count(),
+            'videoCount' => Video::query()->active()->available()->count(),
         ]);
     }
 

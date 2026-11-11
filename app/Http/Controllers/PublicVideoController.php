@@ -16,6 +16,7 @@ class PublicVideoController extends Controller
 
         $videos = Video::query()
             ->active()
+            ->available()
             ->ordered()
             ->when($search !== '', fn ($query) => $query->where(function ($query) use ($search): void {
                 $like = '%'.addcslashes($search, '%_\\').'%';
@@ -28,13 +29,13 @@ class PublicVideoController extends Controller
 
         $kategoris = Video::query()
             ->active()
+            ->available()
             ->ordered()
             ->pluck('kategori')
             ->unique()
             ->values();
 
-        $total = Video::query()->active()->count();
-        $tersedia = Video::query()->active()->whereNotNull('youtube_url')->where('youtube_url', '!=', '')->count();
+        $total = Video::query()->active()->available()->count();
 
         return view('public.videos.index', [
             'videos' => $videos,
@@ -42,19 +43,20 @@ class PublicVideoController extends Controller
             'search' => $search,
             'kategoriAktif' => $kategori,
             'total' => $total,
-            'tersedia' => $tersedia,
             'pageTitle' => 'Video Edukasi',
         ]);
     }
 
     public function show(Video $video): View|Response
     {
-        if (! $video->is_active) {
+        // Video yang belum punya tautan YouTube tidak ditampilkan ke publik.
+        if (! $video->is_active || ! $video->hasVideo()) {
             return response()->view('public.not-found', [], 404);
         }
 
         $lainnya = Video::query()
             ->active()
+            ->available()
             ->ordered()
             ->whereKeyNot($video->getKey())
             ->where('kategori', $video->kategori)
@@ -65,6 +67,7 @@ class PublicVideoController extends Controller
             $lainnya = $lainnya->merge(
                 Video::query()
                     ->active()
+                    ->available()
                     ->ordered()
                     ->whereKeyNot($video->getKey())
                     ->where('kategori', '!=', $video->kategori)

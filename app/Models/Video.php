@@ -32,6 +32,15 @@ class Video extends Model
     }
 
     /**
+     * Hanya video yang sudah punya tautan YouTube (layak tampil di publik).
+     */
+    #[Scope]
+    protected function available(Builder $query): void
+    {
+        $query->whereNotNull('youtube_url')->where('youtube_url', '!=', '');
+    }
+
+    /**
      * Ambil ID video YouTube dari berbagai bentuk URL.
      */
     public function youtubeId(): ?string
