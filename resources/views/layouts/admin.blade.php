@@ -36,11 +36,11 @@
                         FAQ
                     </a>
                     <a href="{{ route('admin.videos.index') }}" @if (request()->routeIs('admin.videos.*')) aria-current="page" @endif class="admin-nav-link flex min-h-11 items-center gap-2.5 rounded-lg px-3 font-medium text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital {{ request()->routeIs('admin.videos.*') ? 'bg-[#E8F2FF] font-semibold' : 'hover:bg-sage' }}">
-                        <span class="admin-icon admin-icon-faq" aria-hidden="true"></span>
+                        <span class="admin-icon admin-icon-video" aria-hidden="true"></span>
                         Video
                     </a>
                     <a href="{{ route('admin.topics.index') }}" @if (request()->routeIs('admin.topics.*')) aria-current="page" @endif class="admin-nav-link flex min-h-11 items-center gap-2.5 rounded-lg px-3 font-medium text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital {{ request()->routeIs('admin.topics.*') ? 'bg-[#E8F2FF] font-semibold' : 'hover:bg-sage' }}">
-                        <span class="admin-icon admin-icon-faq" aria-hidden="true"></span>
+                        <span class="admin-icon admin-icon-topic" aria-hidden="true"></span>
                         Topik
                     </a>
                     <a href="{{ route('admin.profile.edit') }}" @if (request()->routeIs('admin.profile.*')) aria-current="page" @endif class="admin-nav-link flex min-h-11 items-center gap-2.5 rounded-lg px-3 font-medium text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital {{ request()->routeIs('admin.profile.*') ? 'bg-[#E8F2FF] font-semibold' : 'hover:bg-sage' }}">
@@ -67,13 +67,26 @@
                         <div class="hidden items-center gap-3 text-sm md:flex">
                             <span class="text-[#547186]">Ruang admin</span>
                             <span aria-hidden="true" class="text-[#7E9AAE]">›</span>
-                            <span class="font-semibold text-hospital-deep">{{ request()->routeIs('admin.dashboard') ? 'Dashboard' : (request()->routeIs('admin.profile.*') ? 'Profil' : 'FAQ') }}</span>
+                            <span class="font-semibold text-hospital-deep">{{ match (true) {
+                                request()->routeIs('admin.dashboard') => 'Dashboard',
+                                request()->routeIs('admin.faqs.*') => 'FAQ',
+                                request()->routeIs('admin.videos.*') => 'Video',
+                                request()->routeIs('admin.topics.*') => 'Topik',
+                                request()->routeIs('admin.profile.*') => 'Profil',
+                                default => 'Admin',
+                            } }}</span>
                         </div>
                         <div class="flex shrink-0 items-center gap-1 sm:gap-2">
                             @include('layouts.fullscreen-toggle')
                             <div class="flex items-center gap-1 md:hidden" aria-label="Logo mitra">
+                                <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo RSUD Dr. M. Yunus Bengkulu" width="28" height="28" class="size-7 object-contain">
                                 <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="28" height="28" class="size-7 object-contain">
                                 <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="28" height="28" class="institution-logo-poltek size-7 object-contain">
+                            </div>
+                            <div class="hidden items-center gap-3 border-l border-[#D8E6EF] pl-4 md:flex" aria-label="Logo mitra">
+                                <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo RSUD Dr. M. Yunus Bengkulu" width="32" height="32" class="size-8 object-contain">
+                                <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="32" height="32" class="size-8 object-contain">
+                                <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="32" height="32" class="institution-logo-poltek size-8 object-contain">
                             </div>
                             <div class="hidden items-center gap-3 md:flex">
                                 <span aria-hidden="true" class="flex size-8 items-center justify-center rounded-full bg-sage text-xs font-semibold text-hospital">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
@@ -96,8 +109,8 @@
                     <nav aria-label="Navigasi admin mobile" class="grid gap-1 pb-2 pt-1">
                         <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.dashboard') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-dashboard" aria-hidden="true"></span>Dashboard</a>
                         <a href="{{ route('admin.faqs.index') }}" @if (request()->routeIs('admin.faqs.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.faqs.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>FAQ</a>
-                        <a href="{{ route('admin.videos.index') }}" @if (request()->routeIs('admin.videos.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.videos.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>Video</a>
-                        <a href="{{ route('admin.topics.index') }}" @if (request()->routeIs('admin.topics.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.topics.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>Topik</a>
+                        <a href="{{ route('admin.videos.index') }}" @if (request()->routeIs('admin.videos.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.videos.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-video" aria-hidden="true"></span>Video</a>
+                        <a href="{{ route('admin.topics.index') }}" @if (request()->routeIs('admin.topics.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.topics.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-topic" aria-hidden="true"></span>Topik</a>
                         <a href="{{ route('admin.profile.edit') }}" @if (request()->routeIs('admin.profile.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.profile.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-profile" aria-hidden="true"></span>Profil</a>
                         <form action="{{ route('admin.logout') }}" method="POST" class="border-t border-[#D8E6EF] pt-2 sm:hidden">
                             @csrf

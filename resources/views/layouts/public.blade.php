@@ -27,6 +27,7 @@
                         </a>
                         @include('layouts.fullscreen-toggle')
                         <div class="flex items-center gap-1 border-l border-[#D8E6EF] pl-2 sm:gap-3 sm:pl-4" aria-label="Logo mitra">
+                            <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo RSUD Dr. M. Yunus Bengkulu" width="40" height="40" class="public-partner-logo size-7 object-contain sm:size-10">
                             <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="40" height="40" class="public-partner-logo size-7 object-contain sm:size-10">
                             <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="40" height="40" class="institution-logo-poltek public-partner-logo size-7 object-contain sm:size-10">
                         </div>

@@ -355,6 +355,8 @@ body {
 
 .admin-icon-dashboard { --admin-icon-source: url('../icons/layout-dashboard.svg'); }
 .admin-icon-faq { --admin-icon-source: url('../icons/messages.svg'); }
+.admin-icon-video { --admin-icon-source: url('../icons/video.svg'); }
+.admin-icon-topic { --admin-icon-source: url('../icons/tag.svg'); }
 .admin-icon-profile { --admin-icon-source: url('../icons/user.svg'); }
 .admin-icon-logout { --admin-icon-source: url('../icons/logout.svg'); }
 .admin-icon-drag { --admin-icon-source: url('../icons/grip-vertical.svg'); }
