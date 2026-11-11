@@ -175,13 +175,44 @@ try {
         exit 0
     }
 
-    $npmExecutable = Get-NpmExecutable -laragonRoots $laragonRoots
+    # --- Folder catatan dan penentuan mode tampilan ----------------------
+    $storageLogs = Join-Path $projectPath 'storage\logs'
 
-    if (-not $npmExecutable -or -not (Test-Path -LiteralPath (Join-Path $projectPath 'node_modules\vite\bin\vite.js') -PathType Leaf)) {
-        throw 'Node.js, npm, atau node_modules belum tersedia. Pasang Node.js lalu jalankan npm install satu kali di folder proyek.'
+    if (-not (Test-Path -LiteralPath $storageLogs -PathType Container)) {
+        New-Item -ItemType Directory -Path $storageLogs -Force | Out-Null
     }
 
-    $env:Path = "$(Split-Path $npmExecutable -Parent);$env:Path"
+    $manifestFile = Join-Path $projectPath 'public\build\manifest.json'
+    $asetTerbangun = Test-Path -LiteralPath $manifestFile -PathType Leaf
+
+    if ($asetTerbangun -and (Test-Path -LiteralPath $viteHotFile -PathType Leaf)) {
+        # berkas hot tertinggal dari sesi pengembangan; mode tampilan memakai hasil build
+        Remove-Item -LiteralPath $viteHotFile -Force -ErrorAction SilentlyContinue
+    }
+
+    $perluVite = -not $asetTerbangun
+
+    if ($perluVite) {
+        $npmExecutable = Get-NpmExecutable -laragonRoots $laragonRoots
+
+        $punyaVite = [bool]$npmExecutable -and (Test-Path -LiteralPath (Join-Path $projectPath 'node_modules\vite\bin\vite.js') -PathType Leaf)
+
+        if ($npmExecutable -and $punyaVite) {
+            # bangun berkas tampilan sekali agar kios berikutnya tidak memerlukan Node.js
+            $env:Path = "$(Split-Path $npmExecutable -Parent);$env:Path"
+
+            Start-Process -FilePath $npmExecutable -ArgumentList @('run', 'build') -WorkingDirectory $projectPath -WindowStyle Hidden -Wait -RedirectStandardOutput (Join-Path $storageLogs 'hemocolab-build.log') -RedirectStandardError (Join-Path $storageLogs 'hemocolab-build-error.log')
+
+            if (Test-Path -LiteralPath $manifestFile -PathType Leaf) {
+                $perluVite = $false
+                Remove-Item -LiteralPath $viteHotFile -Force -ErrorAction SilentlyContinue
+            }
+        }
+
+        if ($perluVite -and -not ($npmExecutable -and $punyaVite)) {
+            throw 'Berkas tampilan (public\build) belum tersedia dan Node.js tidak ditemukan. Jalankan "npm install" lalu "npm run build" satu kali di folder proyek.'
+        }
+    }
 
     $laragonExecutable = $null
 
@@ -206,18 +237,20 @@ try {
         $serverProcess = Start-Process -FilePath $phpExecutable -ArgumentList "artisan serve --host=127.0.0.1 --port=$port --tries=1" -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemocolab-server.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemocolab-server-error.log')
     }
 
-    if (-not (Test-ViteReady)) {
-        if (Test-PortListener -port $vitePort) {
-            throw "Port $vitePort sudah dipakai aplikasi lain. Tutup aplikasi tersebut lalu klik shortcut lagi."
-        }
+    if ($perluVite) {
+        if (-not (Test-ViteReady)) {
+            if (Test-PortListener -port $vitePort) {
+                throw "Port $vitePort sudah dipakai aplikasi lain. Tutup aplikasi tersebut lalu klik shortcut lagi."
+            }
 
-        $viteProcess = Start-Process -FilePath $npmExecutable -ArgumentList @('run', 'dev', '--', '--host', '127.0.0.1', '--port', "$vitePort", '--strictPort') -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemocolab-vite.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemocolab-vite-error.log')
+            $viteProcess = Start-Process -FilePath $npmExecutable -ArgumentList @('run', 'dev', '--', '--host', '127.0.0.1', '--port', "$vitePort", '--strictPort') -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemocolab-vite.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemocolab-vite-error.log')
+        }
     }
 
     $deadline = (Get-Date).AddSeconds(45)
 
     while ((Get-Date) -lt $deadline) {
-        if ((Test-AppReady) -and (Test-ViteReady)) {
+        if ((Test-AppReady) -and ((-not $perluVite) -or (Test-ViteReady))) {
             break
         }
 
@@ -236,7 +269,7 @@ try {
         throw 'Aplikasi belum siap. Klik Start All di Laragon jika MySQL belum aktif, lalu klik shortcut lagi. Pastikan port 8000 tidak dipakai aplikasi lain. Detail server ada di storage\logs\hemocolab-server-error.log.'
     }
 
-    if (-not (Test-ViteReady)) {
+    if ($perluVite -and -not (Test-ViteReady)) {
         throw 'Vite belum siap. Periksa storage\logs\hemocolab-vite.log dan hemocolab-vite-error.log.'
     }
 
