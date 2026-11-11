@@ -23,7 +23,6 @@
                         </span>
                     </span>
                     <span class="mt-2 block text-sm font-semibold leading-snug tracking-tight text-hospital-deep">{{ config('app.name') }}</span>
-                    <span class="mt-1 block text-xs leading-snug text-[#547186]">{{ config('hospital.name') }}</span>
                 </a>
 
                 <p class="mt-7 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#547186]">Ruang admin</p>
@@ -63,7 +62,6 @@
                             <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="36" height="36" class="size-9 shrink-0 object-contain">
                             <span class="min-w-0 leading-tight">
                                 <span class="block text-sm font-semibold">{{ config('app.name') }}</span>
-                                <span class="hidden text-[10px] text-[#547186] min-[400px]:block sm:text-xs">{{ config('hospital.name') }}</span>
                             </span>
                         </a>
                         <div class="hidden items-center gap-3 text-sm md:flex">

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ isset($pageTitle) ? $pageTitle.' | ' : '' }}{{ config('app.name') }} | {{ config('hospital.name') }}</title>
+        <title>{{ isset($pageTitle) ? $pageTitle.' | ' : '' }}{{ config('app.name') }}</title>
         <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/hemocolab-favicon.png') }}">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
         <link rel="apple-touch-icon" href="{{ asset('images/hemocolab-favicon.png') }}">
@@ -18,7 +18,6 @@
                         <img src="{{ asset('images/hemocolab-icon.png') }}" alt="Logo HEMOCOLAB" width="48" height="48" class="public-brand-logo size-9 shrink-0 object-contain sm:size-11">
                         <span class="min-w-0 leading-tight">
                             <span class="public-brand-name block text-sm font-semibold tracking-tight text-hospital-deep sm:text-base">{{ config('app.name') }}</span>
-                            <span class="public-brand-subtitle mt-0.5 hidden text-[11px] leading-snug text-[#527085] min-[400px]:block sm:text-xs">{{ config('hospital.name') }}</span>
                         </span>
                     </a>
                     <div class="flex shrink-0 items-center gap-1 sm:gap-3">

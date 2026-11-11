@@ -15,7 +15,6 @@
                     <img src="{{ asset('images/hemocolab-icon.png') }}" alt="Logo HEMOCOLAB" width="42" height="42" class="size-9 shrink-0 object-contain sm:size-10.5">
                     <span class="min-w-0 leading-tight">
                         <span class="block text-sm font-semibold tracking-tight text-hospital-deep">{{ config('app.name') }}</span>
-                        <span class="mt-0.5 hidden text-[11px] leading-snug text-[#547186] min-[400px]:block sm:text-xs">{{ config('hospital.name') }}</span>
                     </span>
                 </div>
                 <div class="flex shrink-0 items-center gap-1 sm:gap-3">

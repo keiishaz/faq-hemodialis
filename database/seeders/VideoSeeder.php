@@ -8,8 +8,13 @@ use Illuminate\Database\Seeder;
 class VideoSeeder extends Seeder
 {
     /**
-     * Daftar video edukasi mahasiswa Prodi Promosi Kesehatan Kelas 3A,
-     * Poltekkes Kemenkes Bengkulu (46 judul).
+     * Data video edukasi yang dipakai aplikasi HEMOCOLAB.
+     *
+     * Sumber awal: daftar video mahasiswa Program Studi Promosi Kesehatan
+     * Kelas 3A, Poltekkes Kemenkes Bengkulu. Tautan YouTube dan status tayang
+     * mengikuti data terkini pada basis data produksi.
+     *
+     * Seeder bersifat idempoten: dijalankan berulang tidak menggandakan data.
      */
     public function run(): void
     {
@@ -21,15 +26,19 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hipertensi',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 1,
             ],
             [
                 'judul' => 'Diet Sehat untuk Mencegah dan Mengendalikan Hipertensi',
                 'slug' => 'diet-sehat-untuk-mencegah-dan-mengendalikan-hipertensi',
                 'pembicara' => 'Anderine Habibullah Utami',
-                'kategori' => 'Hipertensi',
+                'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/TLDyX3SwnwE?si=CJUETkxKxUJWVuu9',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 2,
             ],
             [
@@ -39,6 +48,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hipertensi',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 3,
             ],
             [
@@ -48,6 +59,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hipertensi',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 4,
             ],
             [
@@ -57,6 +70,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hipertensi',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 5,
             ],
             [
@@ -66,6 +81,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Diabetes Melitus',
                 'youtube_url' => 'https://youtu.be/JfvGyQ7dzKk?si=vk5_WnN5hnbcRobM',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 6,
             ],
             [
@@ -75,6 +92,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Diabetes Melitus',
                 'youtube_url' => 'https://youtu.be/rQUheK12hao?si=FtFBjPhI7f_S-AP0',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 7,
             ],
             [
@@ -84,6 +103,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Diabetes Melitus',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 8,
             ],
             [
@@ -93,6 +114,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Diabetes Melitus',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 9,
             ],
             [
@@ -102,6 +125,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Diabetes Melitus',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 10,
             ],
             [
@@ -111,6 +136,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 11,
             ],
             [
@@ -120,6 +147,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 12,
             ],
             [
@@ -129,6 +158,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 13,
             ],
             [
@@ -138,6 +169,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 14,
             ],
             [
@@ -147,6 +180,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => 'https://youtu.be/asVkVZAknQc?si=A6I33_kNj2pPeAcs',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 15,
             ],
             [
@@ -156,6 +191,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/upX02HgQxEo?si=RQM1PpJUxTSDUm7G',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 16,
             ],
             [
@@ -165,6 +202,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/QM0Q2XqE0nc?si=jdB3FyYL1Z3ANa8Y',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 17,
             ],
             [
@@ -174,6 +213,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/MwOc0UYSkb8?feature=shared',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 18,
             ],
             [
@@ -183,6 +224,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 19,
             ],
             [
@@ -192,6 +235,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 20,
             ],
             [
@@ -201,6 +246,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 21,
             ],
             [
@@ -210,6 +257,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/4kpMoRF-8-s?si=HmWrIcrIpEOb7lEL',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 22,
             ],
             [
@@ -219,6 +268,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 23,
             ],
             [
@@ -228,6 +279,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 24,
             ],
             [
@@ -237,6 +290,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 25,
             ],
             [
@@ -246,6 +301,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Diabetes Melitus',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 26,
             ],
             [
@@ -255,6 +312,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hipertensi',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 27,
             ],
             [
@@ -264,6 +323,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 28,
             ],
             [
@@ -273,6 +334,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 29,
             ],
             [
@@ -282,6 +345,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => 'https://youtu.be/HoWq1VzbFA8?si=rvz_2qUyRNIhv5qq',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 30,
             ],
             [
@@ -291,6 +356,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => 'https://youtu.be/Q6ZPNxHOoPM?si=4hzOHBv7sNSV93aY',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 31,
             ],
             [
@@ -300,6 +367,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => 'https://youtu.be/CLDK-UwKt24?si=pYWMLzFhpbfy8vVq',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 32,
             ],
             [
@@ -309,6 +378,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 33,
             ],
             [
@@ -318,6 +389,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Batu Ginjal & Saluran Kemih',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 34,
             ],
             [
@@ -327,6 +400,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 35,
             ],
             [
@@ -336,6 +411,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 36,
             ],
             [
@@ -345,6 +422,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/_O9qDIinEtM?si=3aqQ1MvjHv9CeCjt',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 37,
             ],
             [
@@ -354,6 +433,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 38,
             ],
             [
@@ -363,6 +444,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 39,
             ],
             [
@@ -372,6 +455,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 40,
             ],
             [
@@ -381,6 +466,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 41,
             ],
             [
@@ -390,6 +477,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => 'https://youtu.be/-ezKughEiHI?si=VuMe7l6gbJlbGN6R',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 42,
             ],
             [
@@ -399,6 +488,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => 'https://youtu.be/nozf-V7u8Vk?si=gl6b9X0sT9iG9GTB',
                 'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 43,
             ],
             [
@@ -408,6 +499,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Kesehatan Ginjal',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 44,
             ],
             [
@@ -417,6 +510,8 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Hemodialisis',
                 'youtube_url' => null,
                 'durasi' => '10–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 45,
             ],
             [
@@ -426,14 +521,38 @@ class VideoSeeder extends Seeder
                 'kategori' => 'Peritoneal Dialisis',
                 'youtube_url' => null,
                 'durasi' => '13–15 menit',
+                'deskripsi' => null,
+                'is_active' => 1,
                 'sort_order' => 46,
+            ],
+            [
+                'judul' => 'Cegah Hipertensi | Bincang Sehati',
+                'slug' => 'cegah-hipertensi-bincang-sehati',
+                'pembicara' => 'Bincang Sehati',
+                'kategori' => 'Hipertensi',
+                'youtube_url' => 'https://youtu.be/7zpPCjTDvlw',
+                'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
+                'sort_order' => 47,
+            ],
+            [
+                'judul' => 'Kebiasaan Sehari-hari yang Tanpa Disadari Pemicu Hernia | Bincang Sehati DAAI TV',
+                'slug' => 'kebiasaan-sehari-hari-yang-tanpa-disadari-pemicu-hernia-bincang-sehati-daai-tv',
+                'pembicara' => 'Bincang Sehati',
+                'kategori' => 'Hemodialisis',
+                'youtube_url' => 'https://youtu.be/X2g6yJBTvrU',
+                'durasi' => null,
+                'deskripsi' => null,
+                'is_active' => 1,
+                'sort_order' => 48,
             ],
         ];
 
         foreach ($videos as $video) {
             Video::query()->updateOrCreate(
                 ['slug' => $video['slug']],
-                $video + ['is_active' => true],
+                $video,
             );
         }
     }

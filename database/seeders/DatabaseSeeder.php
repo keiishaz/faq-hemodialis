@@ -10,13 +10,16 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Urutan seeding: akun admin, topik master, konten FAQ, lalu data video.
+     * Seluruh seeder bersifat idempoten sehingga aman dijalankan berulang.
      */
     public function run(): void
     {
         $this->call([
             AdminSeeder::class,
             FaqContentSeeder::class,
+            VideoTopicSeeder::class,
+            VideoSeeder::class,
         ]);
     }
 }
