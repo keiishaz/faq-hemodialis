@@ -44,6 +44,8 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
         Route::get('/videos/create', [VideoController::class, 'create'])->name('videos.create');
         Route::post('/videos', [VideoController::class, 'store'])->name('videos.store');
+        Route::post('/videos/quick', [VideoController::class, 'quickStore'])->name('videos.quick');
+        Route::patch('/videos/{video}/link', [VideoController::class, 'updateLink'])->whereNumber('video')->name('videos.link');
         Route::get('/videos/{video}/edit', [VideoController::class, 'edit'])->whereNumber('video')->name('videos.edit');
         Route::put('/videos/{video}', [VideoController::class, 'update'])->whereNumber('video')->name('videos.update');
         Route::patch('/videos/{video}/status', [VideoController::class, 'toggle'])->whereNumber('video')->name('videos.toggle');

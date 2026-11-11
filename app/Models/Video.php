@@ -36,7 +36,15 @@ class Video extends Model
      */
     public function youtubeId(): ?string
     {
-        $url = trim((string) $this->youtube_url);
+        return static::parseYouTubeId((string) $this->youtube_url);
+    }
+
+    /**
+     * Ambil 11 karakter ID video dari berbagai bentuk tautan YouTube.
+     */
+    public static function parseYouTubeId(?string $url): ?string
+    {
+        $url = trim((string) $url);
 
         if ($url === '') {
             return null;
@@ -44,8 +52,7 @@ class Video extends Model
 
         $patterns = [
             '~youtu\.be/([A-Za-z0-9_-]{11})~',
-            '~youtube\.com/(?:watch\?(?:.*&)?v=)([A-Za-z0-9_-]{11})~',
-            '~youtube\.com/(?:embed|shorts|live|v)/([A-Za-z0-9_-]{11})~',
+            '~youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/|v/)([A-Za-z0-9_-]{11})~',
             '~^([A-Za-z0-9_-]{11})$~',
         ];
 
