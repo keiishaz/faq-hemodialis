@@ -8,11 +8,8 @@
                 Video Edukasi
             </span>
             <h1 class="mt-4 text-[2rem] font-semibold leading-[1.15] tracking-tight sm:text-[2.6rem]">Belajar Lewat Video, Pahami Ginjal &amp; Hemodialisis</h1>
-            <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#E8F8FF] sm:text-lg">
-                Kumpulan video edukasi singkat yang disusun oleh mahasiswa Program Studi Promosi Kesehatan Kelas 3A, Poltekkes Kemenkes Bengkulu, sebagai sarana pembelajaran pasien dan keluarga.
-            </p>
 
-            <dl class="mx-auto mt-7 grid max-w-md grid-cols-2 gap-3 text-center sm:gap-4">
+            <dl class="mx-auto mt-6 grid max-w-md grid-cols-2 gap-3 text-center sm:gap-4">
                 <div class="rounded-xl border border-white/20 bg-white/10 px-3 py-3">
                     <dt class="text-[11px] font-medium tracking-wide uppercase text-[#D6EEFB]">Video tersedia</dt>
                     <dd class="mt-1 text-2xl font-semibold">{{ $total }}</dd>
