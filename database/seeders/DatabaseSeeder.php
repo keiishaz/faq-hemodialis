@@ -10,14 +10,20 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Urutan seeding: akun admin, topik master, konten FAQ, lalu data video.
-     * Seluruh seeder bersifat idempoten sehingga aman dijalankan berulang.
+     * Urutan seeding: akun admin, materi FAQ dari dokumen edukasi, topik
+     * master, lalu data video.
+     *
+     * FaqContentSeeder menyiapkan sembilan topik ringkas bawaan, kemudian
+     * FaqMateriSeeder menggantinya dengan sepuluh pertanyaan lengkap yang
+     * disalin dari dokumen materi hemodialisa. Seluruh seeder aman dijalankan
+     * berulang.
      */
     public function run(): void
     {
         $this->call([
             AdminSeeder::class,
             FaqContentSeeder::class,
+            FaqMateriSeeder::class,
             VideoTopicSeeder::class,
             VideoSeeder::class,
         ]);
