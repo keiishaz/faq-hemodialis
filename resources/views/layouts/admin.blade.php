@@ -59,7 +59,7 @@
                 <header class="sticky top-0 z-50 border-b border-[#D8E6EF] bg-white">
                     <div class="mx-auto flex min-h-16 w-full max-w-[1440px] items-center justify-between gap-2 px-5 sm:px-7 lg:gap-4 lg:px-8">
                         <a href="{{ route('admin.dashboard') }}" class="flex min-w-0 items-center gap-2 text-hospital-deep md:hidden">
-                            <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="36" height="36" class="size-9 shrink-0 object-contain">
+                            <img src="{{ asset('images/hemocolab-icon.png') }}" alt="Logo HEMOCOLAB" width="36" height="36" class="size-9 shrink-0 object-contain">
                             <span class="min-w-0 leading-tight">
                                 <span class="block text-sm font-semibold">{{ config('app.name') }}</span>
                             </span>

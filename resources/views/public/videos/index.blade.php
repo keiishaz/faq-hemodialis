@@ -9,7 +9,7 @@
             </span>
             <h1 class="mt-4 text-[2rem] font-semibold leading-[1.15] tracking-tight sm:text-[2.6rem]">Belajar Lewat Video, Pahami Ginjal &amp; Hemodialisis</h1>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#E8F8FF] sm:text-lg">
-                Kumpulan video edukasi singkat yang disusun oleh mahasiswa Program Studi Promosi Kesehatan Kelas 3A, Poltekkes Kemenkes Bengkulu, bekerja sama dengan RSUD Dr. M. Yunus Bengkulu.
+                Kumpulan video edukasi singkat yang disusun oleh mahasiswa Program Studi Promosi Kesehatan Kelas 3A, Poltekkes Kemenkes Bengkulu, sebagai sarana pembelajaran pasien dan keluarga.
             </p>
 
             <dl class="mx-auto mt-7 grid max-w-md grid-cols-2 gap-3 text-center sm:gap-4">

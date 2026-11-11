@@ -30,7 +30,7 @@
         <main class="mx-auto grid min-h-[calc(100dvh-64px)] w-full max-w-5xl items-center px-5 py-6 sm:px-8 sm:py-8">
             <div class="admin-panel mx-auto grid w-full max-w-4xl overflow-hidden rounded-2xl border border-[#D6E5EE] bg-white lg:grid-cols-[1.02fr_0.98fr]">
                 <div class="relative min-h-40 overflow-hidden bg-[#D8E6EF] sm:min-h-52 lg:min-h-[430px]">
-                    <img src="{{ asset('images/rsud-m-yunus-building.jpg') }}" alt="Gedung RSUD Dr. M. Yunus Bengkulu" width="1000" height="600" class="absolute inset-0 size-full object-cover object-[70%_center] lg:object-[74%_center]">
+                    <img src="{{ asset('images/layanan-kesehatan.jpg') }}" alt="Ilustrasi layanan kesehatan" width="1000" height="600" class="absolute inset-0 size-full object-cover object-[70%_center] lg:object-[74%_center]">
                 </div>
                 <div class="self-center p-6 sm:p-8 lg:p-9">
                     <span class="mb-4 flex size-10 items-center justify-center rounded-lg bg-[#E8F2FF] text-hospital" aria-hidden="true"><span class="admin-icon admin-icon-lock"></span></span>
