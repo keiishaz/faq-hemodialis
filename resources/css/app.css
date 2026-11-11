@@ -203,6 +203,95 @@ body {
     overflow-wrap: break-word;
 }
 
+/* Tata letak isi jawaban panjang: subjudul, daftar, tabel, dan kutipan sumber */
+.public-detail-content > *:first-child {
+    margin-top: 0;
+}
+
+.public-detail-content h3 {
+    margin: 1.75rem 0 0.65rem;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #16466D;
+    text-align: left;
+}
+
+.public-detail-content h3::after {
+    content: "";
+    display: block;
+    width: 2.25rem;
+    height: 2px;
+    margin-top: 0.4rem;
+    border-radius: 999px;
+    background: #86C7B4;
+}
+
+.public-detail-content p {
+    margin: 0 0 0.85rem;
+    line-height: 1.85;
+}
+
+.public-detail-content ul,
+.public-detail-content ol {
+    margin: 0.35rem 0 1.05rem;
+    padding-left: 1.35rem;
+    display: grid;
+    gap: 0.4rem;
+}
+
+.public-detail-content ul { list-style: disc; }
+.public-detail-content ol { list-style: decimal; }
+
+.public-detail-content li {
+    line-height: 1.75;
+    padding-left: 0.15rem;
+}
+
+.public-detail-content li::marker {
+    color: #0867B2;
+}
+
+.public-detail-content strong {
+    font-weight: 650;
+    color: #16466D;
+}
+
+.public-detail-content table {
+    width: 100%;
+    margin: 1rem 0 1.25rem;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    text-align: left;
+}
+
+.public-detail-content th,
+.public-detail-content td {
+    border: 1px solid #B6D8E8;
+    padding: 0.6rem 0.75rem;
+    vertical-align: top;
+    line-height: 1.6;
+}
+
+.public-detail-content th {
+    background: #E3F3FA;
+    font-weight: 650;
+    color: #16466D;
+}
+
+.public-detail-content tbody tr:nth-child(even) td {
+    background: #F3F8FC;
+}
+
+@media (min-width: 640px) {
+    .public-detail-content table { font-size: 1rem; }
+    .public-detail-content h3 { font-size: 1.125rem; }
+}
+
+.faq-answer-content p + p {
+    margin-top: 0.5rem;
+}
+
 @media (min-width: 640px) {
     .faq-answer-content {
         margin-left: 3rem;
