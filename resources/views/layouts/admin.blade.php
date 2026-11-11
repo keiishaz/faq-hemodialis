@@ -15,12 +15,6 @@
                         <span class="flex size-11 items-center justify-center">
                             <img src="{{ asset('images/hemocolab-icon.png') }}" alt="Logo HEMOCOLAB" width="36" height="36" class="size-9 object-contain">
                         </span>
-                        <span class="flex size-11 items-center justify-center">
-                            <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="44" height="44" class="size-11 object-contain">
-                        </span>
-                        <span class="flex size-11 items-center justify-center">
-                            <img src="{{ asset('images/poltek.webp') }}" alt="Logo Poltekkes" width="44" height="44" class="institution-logo-poltek size-11 object-contain">
-                        </span>
                     </span>
                     <span class="mt-2 block text-sm font-semibold leading-snug tracking-tight text-hospital-deep">{{ config('app.name') }}</span>
                 </a>
