@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Masuk Admin | {{ config('app.name') }}</title>
-        <link rel="icon" type="image/png" href="{{ asset('images/hemocolab-favicon.png') }}">
+        <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/hemocolab-favicon.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-dvh bg-paper font-sans text-ink antialiased">

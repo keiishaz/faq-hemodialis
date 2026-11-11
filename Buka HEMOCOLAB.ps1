@@ -108,7 +108,7 @@ function Show-LaunchError {
     Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.MessageBox]::Show(
         $message,
-        'HEMO-KIOSK',
+        'HEMOCOLAB',
         [System.Windows.Forms.MessageBoxButtons]::OK,
         [System.Windows.Forms.MessageBoxIcon]::Error
     ) | Out-Null
@@ -117,7 +117,7 @@ function Show-LaunchError {
 function Test-AppReady {
     try {
         $response = Invoke-WebRequest -Uri $readinessUrl -UseBasicParsing -TimeoutSec 2
-        return $response.StatusCode -eq 200 -and $response.Content.Contains('HEMO-KIOSK')
+        return $response.StatusCode -eq 200 -and $response.Content.Contains('HEMOCOLAB')
     } catch {
         return $false
     }
@@ -203,7 +203,7 @@ try {
     }
 
     if (-not (Test-PortListener -port $port)) {
-        $serverProcess = Start-Process -FilePath $phpExecutable -ArgumentList "artisan serve --host=127.0.0.1 --port=$port --tries=1" -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemo-kiosk-server.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemo-kiosk-server-error.log')
+        $serverProcess = Start-Process -FilePath $phpExecutable -ArgumentList "artisan serve --host=127.0.0.1 --port=$port --tries=1" -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemocolab-server.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemocolab-server-error.log')
     }
 
     if (-not (Test-ViteReady)) {
@@ -211,7 +211,7 @@ try {
             throw "Port $vitePort sudah dipakai aplikasi lain. Tutup aplikasi tersebut lalu klik shortcut lagi."
         }
 
-        $viteProcess = Start-Process -FilePath $npmExecutable -ArgumentList @('run', 'dev', '--', '--host', '127.0.0.1', '--port', "$vitePort", '--strictPort') -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemo-kiosk-vite.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemo-kiosk-vite-error.log')
+        $viteProcess = Start-Process -FilePath $npmExecutable -ArgumentList @('run', 'dev', '--', '--host', '127.0.0.1', '--port', "$vitePort", '--strictPort') -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $projectPath 'storage\logs\hemocolab-vite.log') -RedirectStandardError (Join-Path $projectPath 'storage\logs\hemocolab-vite-error.log')
     }
 
     $deadline = (Get-Date).AddSeconds(45)
@@ -222,22 +222,22 @@ try {
         }
 
         if ($serverProcess -and $serverProcess.HasExited) {
-            throw 'Server gagal dijalankan. Periksa storage\logs\hemo-kiosk-server-error.log.'
+            throw 'Server gagal dijalankan. Periksa storage\logs\hemocolab-server-error.log.'
         }
 
         if ($viteProcess -and $viteProcess.HasExited) {
-            throw 'Vite gagal dijalankan. Periksa storage\logs\hemo-kiosk-vite-error.log.'
+            throw 'Vite gagal dijalankan. Periksa storage\logs\hemocolab-vite-error.log.'
         }
 
         Start-Sleep -Milliseconds 500
     }
 
     if (-not (Test-AppReady)) {
-        throw 'Aplikasi belum siap. Klik Start All di Laragon jika MySQL belum aktif, lalu klik shortcut lagi. Pastikan port 8000 tidak dipakai aplikasi lain. Detail server ada di storage\logs\hemo-kiosk-server-error.log.'
+        throw 'Aplikasi belum siap. Klik Start All di Laragon jika MySQL belum aktif, lalu klik shortcut lagi. Pastikan port 8000 tidak dipakai aplikasi lain. Detail server ada di storage\logs\hemocolab-server-error.log.'
     }
 
     if (-not (Test-ViteReady)) {
-        throw 'Vite belum siap. Periksa storage\logs\hemo-kiosk-vite.log dan hemo-kiosk-vite-error.log.'
+        throw 'Vite belum siap. Periksa storage\logs\hemocolab-vite.log dan hemocolab-vite-error.log.'
     }
 
     if (-not $NoBrowser) {

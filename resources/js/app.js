@@ -527,8 +527,8 @@ function createFullscreenFrame() {
     const previousFrame = document.querySelector('[data-fullscreen-frame][data-fullscreen-active]');
     const frame = document.createElement('iframe');
     fullscreenFrameSequence += 1;
-    frame.name = `hemo-kiosk-fullscreen-frame-${fullscreenFrameSequence}`;
-    frame.title = 'Halaman HEMO-KIOSK';
+    frame.name = `hemocolab-fullscreen-frame-${fullscreenFrameSequence}`;
+    frame.title = 'Halaman HEMOCOLAB';
     frame.className = 'fullscreen-frame';
     frame.setAttribute('data-fullscreen-frame', '');
     frame.setAttribute('allowfullscreen', '');

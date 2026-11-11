@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ isset($pageTitle) ? $pageTitle.' | ' : '' }}{{ config('app.name') }} | {{ config('hospital.name') }}</title>
-        <link rel="icon" type="image/png" href="{{ asset('images/hemocolab-favicon.png') }}">
+        <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/hemocolab-favicon.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
         <link rel="apple-touch-icon" href="{{ asset('images/hemocolab-favicon.png') }}">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
