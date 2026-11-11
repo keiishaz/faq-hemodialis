@@ -1,12 +1,13 @@
 param (
     [switch] $Visible,
-    [switch] $Check
+    [switch] $Check,
+    [switch] $Quiet
 )
 
 $ErrorActionPreference = 'Stop'
 
 $projectPath   = $PSScriptRoot
-$serverUrl     = 'http://localhost:8000'
+$serverUrl     = 'http://127.0.0.1:8000'
 $serverPort    = 8000
 $vitePort      = 5173
 $viteHotFile   = Join-Path $projectPath 'public\hot'
@@ -170,11 +171,45 @@ function Ambil-Node {
 function Buka-Peramban {
     param ([string] $alamat)
 
+    $percobaan = @(
+        # 1. melalui explorer.exe (paling andal, memakai peramban baku)
+        {
+            Start-Process -FilePath "$env:SystemRoot\explorer.exe" -ArgumentList "`"$alamat`""
+        },
+        # 2. melalui cmd start
+        {
+            Start-Process -FilePath "$env:SystemRoot\System32\cmd.exe" `
+                -ArgumentList '/c', "start `"`" `"$alamat`"" -WindowStyle Hidden
+        },
+        # 3. langsung sebagai alamat
+        {
+            Start-Process -FilePath $alamat
+        }
+    )
+
+    foreach ($cara in $percobaan) {
+        try {
+            & $cara
+            Start-Sleep -Milliseconds 900
+            Tulis-Log "Peramban dibuka: $alamat"
+            return $true
+        } catch {
+            Tulis-Log "Cara membuka peramban gagal: $($_.Exception.Message)"
+        }
+    }
+
+    Tulis-Log 'Semua cara membuka peramban gagal.'
+    return $false
+}
+
+function Tampilkan-Pesan {
+    param ([string] $pesan, [string] $jenis = 'Information')
+
     try {
-        Start-Process -FilePath $alamat
-        Tulis-Log "Peramban dibuka: $alamat"
+        Add-Type -AssemblyName System.Windows.Forms
+        $ikon = [System.Windows.Forms.MessageBoxIcon]::$jenis
+        [System.Windows.Forms.MessageBox]::Show($pesan, 'HEMOCOLAB', 'OK', $ikon) | Out-Null
     } catch {
-        Tulis-Log "Peramban tidak dapat dibuka otomatis: $($_.Exception.Message)"
     }
 }
 
@@ -278,27 +313,34 @@ try {
     }
 
     # --- npm run dev ------------------------------------------------------
-    if (Uji-Vite) {
-        Tulis-Log 'Vite sudah aktif pada port 5173.'
-    } else {
-        if (Uji-Port -port $vitePort) {
-            throw "Port $vitePort dipakai aplikasi lain. Tutup aplikasi tersebut lalu jalankan HEMOCOLAB kembali."
-        }
+    $viteGagal = $false
 
+    if (Uji-Vite) {
+        Tulis-Log "Vite sudah aktif pada port $vitePort."
+    } elseif (Uji-Port -port $vitePort) {
+        $viteGagal = $true
+        Tulis-Log "Port $vitePort dipakai aplikasi lain; Vite tidak dijalankan."
+    } else {
         Tulis-Log 'Menjalankan: npm run dev'
 
-        $prosesVite = Start-Process -FilePath "$env:SystemRoot\System32\cmd.exe" `
-            -ArgumentList '/c', "npm run dev -- --host 127.0.0.1 --port $vitePort --strictPort" `
-            -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru `
-            -RedirectStandardOutput $viteLog -RedirectStandardError $viteErrLog
+        try {
+            $prosesVite = Start-Process -FilePath "$env:SystemRoot\System32\cmd.exe" `
+                -ArgumentList '/c', "npm run dev -- --host 127.0.0.1 --port $vitePort --strictPort" `
+                -WorkingDirectory $projectPath -WindowStyle Hidden -PassThru `
+                -RedirectStandardOutput $viteLog -RedirectStandardError $viteErrLog
 
-        Start-Sleep -Seconds 2
+            Start-Sleep -Seconds 2
 
-        if ($prosesVite.HasExited) {
-            throw "Vite berhenti segera setelah dijalankan. Periksa $viteErrLog"
+            if ($prosesVite.HasExited) {
+                $viteGagal = $true
+                Tulis-Log "Vite berhenti segera setelah dijalankan. Periksa $viteErrLog"
+            } else {
+                Tulis-Log "Vite berjalan (PID $($prosesVite.Id))."
+            }
+        } catch {
+            $viteGagal = $true
+            Tulis-Log "Vite gagal dijalankan: $($_.Exception.Message)"
         }
-
-        Tulis-Log "Vite berjalan (PID $($prosesVite.Id))."
     }
 
     # --- tunggu siap ------------------------------------------------------
@@ -308,29 +350,48 @@ try {
 
     while ((Get-Date) -lt $batas) {
         if (-not $serverSiap) { $serverSiap = Uji-ServerAplikasi }
-        if (-not $viteSiap) { $viteSiap = Uji-Vite }
+        if (-not $viteSiap -and -not $viteGagal) { $viteSiap = Uji-Vite }
 
-        if ($serverSiap -and $viteSiap) {
+        if ($serverSiap -and ($viteSiap -or $viteGagal)) {
             break
         }
 
         Start-Sleep -Milliseconds 800
     }
 
-    Tulis-Log "Status kesiapan: server=$serverSiap vite=$viteSiap"
+    Tulis-Log "Status kesiapan: server=$serverSiap vite=$viteSiap (viteGagal=$viteGagal)"
 
     if (-not $serverSiap) {
         throw "Aplikasi belum merespons di http://127.0.0.1:$serverPort. Periksa $serverErrLog dan pastikan MySQL aktif."
     }
 
     if (-not $viteSiap) {
-        throw "Vite belum merespons di port $vitePort. Periksa $viteErrLog."
+        $manifestFile = Join-Path $projectPath 'public\build\manifest.json'
+
+        if (Test-Path -LiteralPath $manifestFile -PathType Leaf) {
+            Remove-Item -LiteralPath $viteHotFile -Force -ErrorAction SilentlyContinue
+            Tulis-Log 'Vite tidak aktif; tampilan memakai berkas hasil build.'
+        } else {
+            throw "Vite belum merespons di port $vitePort dan berkas tampilan hasil build tidak tersedia. Periksa $viteErrLog."
+        }
     }
 
-    Buka-Peramban -alamat $serverUrl
+    $perambanTerbuka = Buka-Peramban -alamat $serverUrl
+
+    if (-not $perambanTerbuka) {
+        Tampilkan-Pesan ("Aplikasi sudah berjalan, tetapi peramban tidak dapat dibuka otomatis." +
+            "`n`nBuka alamat berikut secara manual:`n$serverUrl`n`nCatatan: $logFile") 'Warning'
+    }
+
     Tulis-Log 'Peluncuran selesai.'
     exit 0
 } catch {
-    Tulis-Log "GAGAL: $($_.Exception.Message)"
+    $pesan = $_.Exception.Message
+    Tulis-Log "GAGAL: $pesan"
+
+    if (-not $Quiet -and -not $Visible) {
+        Tampilkan-Pesan ("HEMOCOLAB gagal dijalankan.`n`n$pesan`n`nCatatan lengkap:`n$logFile") 'Error'
+    }
+
     exit 1
 }
