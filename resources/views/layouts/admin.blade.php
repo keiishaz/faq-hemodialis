@@ -13,7 +13,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="rounded-lg focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital">
                     <span class="flex items-center gap-2.5">
                         <span class="flex size-11 items-center justify-center">
-                            <img src="{{ asset('images/rsud-m-yunus-logo.png') }}" alt="Logo resmi RSUD Dr. M. Yunus Bengkulu" width="36" height="36" class="size-9 object-contain">
+                            <img src="{{ asset('images/hemocolab-icon.png') }}" alt="Logo HEMOCOLAB" width="36" height="36" class="size-9 object-contain">
                         </span>
                         <span class="flex size-11 items-center justify-center">
                             <img src="{{ asset('images/unib.png') }}" alt="Logo Universitas Bengkulu" width="44" height="44" class="size-11 object-contain">
