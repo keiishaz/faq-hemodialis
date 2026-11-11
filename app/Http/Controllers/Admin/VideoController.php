@@ -54,11 +54,14 @@ class VideoController extends Controller
     {
         $validated = $this->validated($request);
 
+        // Video baru ditempatkan paling atas: seluruh urutan digeser satu tingkat.
+        Video::query()->increment('sort_order');
+
         Video::query()->create([
             ...$validated,
             'slug' => Video::uniqueSlug($validated['judul']),
             'is_active' => (bool) ($validated['is_active'] ?? true),
-            'sort_order' => (int) Video::query()->max('sort_order') + 1,
+            'sort_order' => 0,
         ]);
 
         return to_route('admin.videos.index')->with('status', 'Video berhasil ditambahkan.');
@@ -94,6 +97,9 @@ class VideoController extends Controller
         $judul = $meta['judul'] ?? 'Video edukasi baru';
         $kategori = filled($validated['kategori'] ?? null) ? trim($validated['kategori']) : 'Hemodialisis';
 
+        // Video baru ditempatkan paling atas: seluruh urutan digeser satu tingkat.
+        Video::query()->increment('sort_order');
+
         $video = Video::query()->create([
             'judul' => mb_substr($judul, 0, 255),
             'slug' => Video::uniqueSlug($judul),
@@ -101,7 +107,7 @@ class VideoController extends Controller
             'kategori' => $kategori,
             'youtube_url' => 'https://youtu.be/'.$youtubeId,
             'is_active' => true,
-            'sort_order' => (int) Video::query()->max('sort_order') + 1,
+            'sort_order' => 0,
         ]);
 
         return to_route('admin.videos.index')

@@ -72,6 +72,9 @@
                             <span aria-hidden="true" class="absolute inset-0 bg-gradient-to-t from-[#061B2A]/70 via-[#061B2A]/10 to-transparent"></span>
 
                             <span class="absolute top-2.5 left-2.5 inline-flex max-w-[80%] items-center rounded-md bg-white/95 px-2 py-0.5 text-[11px] font-semibold text-hospital-deep">{{ $video->kategori }}</span>
+                            @if ($loop->first)
+                                <span class="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-md bg-[#17A673] px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">Terbaru</span>
+                            @endif
 
                             <span aria-hidden="true" class="absolute inset-0 flex items-center justify-center">
                                 <span class="flex size-12 items-center justify-center rounded-full bg-white/92 shadow-lg transition duration-200 group-hover:scale-110 group-hover:bg-white">
