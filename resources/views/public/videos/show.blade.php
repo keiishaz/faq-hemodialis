@@ -40,6 +40,13 @@
                     @endif
                 </div>
 
+                @if ($video->hasVideo())
+                    <p class="mt-3 flex items-start gap-2 rounded-xl border border-[#D7E8F1] bg-white px-4 py-3 text-sm leading-relaxed text-[#52697B]">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="mt-0.5 size-4 shrink-0 text-hospital"><circle cx="12" cy="12" r="9" /><path d="M12 11v5" /><path d="M12 7.6v.8" /></svg>
+                        <span>Pemutar tidak menampilkan gambar? Pastikan koneksi stabil, lalu klik tombol <span class="font-semibold text-hospital-deep">Buka di YouTube</span> di bawah. Sebagian video dibatasi pemiliknya agar tidak bisa diputar di situs lain.</span>
+                    </p>
+                @endif
+
                 <div class="mt-6">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="inline-flex items-center rounded-md bg-sage px-2.5 py-1 text-xs font-semibold text-hospital-deep">{{ $video->kategori }}</span>
