@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FaqReorderController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\VideoController;
+use App\Http\Controllers\Admin\VideoTopicController;
 use App\Http\Controllers\PublicFaqController;
 use App\Http\Controllers\PublicVideoController;
 use App\Http\Middleware\PreventAdminCache;
@@ -50,6 +51,10 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::put('/videos/{video}', [VideoController::class, 'update'])->whereNumber('video')->name('videos.update');
         Route::patch('/videos/{video}/status', [VideoController::class, 'toggle'])->whereNumber('video')->name('videos.toggle');
         Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->whereNumber('video')->name('videos.destroy');
+        Route::get('/topics', [VideoTopicController::class, 'index'])->name('topics.index');
+        Route::post('/topics', [VideoTopicController::class, 'store'])->name('topics.store');
+        Route::put('/topics/{topic}', [VideoTopicController::class, 'update'])->whereNumber('topic')->name('topics.update');
+        Route::delete('/topics/{topic}', [VideoTopicController::class, 'destroy'])->whereNumber('topic')->name('topics.destroy');
         Route::post('/logout', [AdminSessionController::class, 'destroy'])->name('logout');
     });
 });

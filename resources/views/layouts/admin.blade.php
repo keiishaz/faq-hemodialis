@@ -40,6 +40,10 @@
                         <span class="admin-icon admin-icon-faq" aria-hidden="true"></span>
                         Video
                     </a>
+                    <a href="{{ route('admin.topics.index') }}" @if (request()->routeIs('admin.topics.*')) aria-current="page" @endif class="admin-nav-link flex min-h-11 items-center gap-2.5 rounded-lg px-3 font-medium text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital {{ request()->routeIs('admin.topics.*') ? 'bg-[#E8F2FF] font-semibold' : 'hover:bg-sage' }}">
+                        <span class="admin-icon admin-icon-faq" aria-hidden="true"></span>
+                        Topik
+                    </a>
                     <a href="{{ route('admin.profile.edit') }}" @if (request()->routeIs('admin.profile.*')) aria-current="page" @endif class="admin-nav-link flex min-h-11 items-center gap-2.5 rounded-lg px-3 font-medium text-[#52697B] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-hospital {{ request()->routeIs('admin.profile.*') ? 'bg-[#E8F2FF] font-semibold' : 'hover:bg-sage' }}">
                         <span class="admin-icon admin-icon-profile" aria-hidden="true"></span>
                         Profil
@@ -95,6 +99,7 @@
                         <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.dashboard') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-dashboard" aria-hidden="true"></span>Dashboard</a>
                         <a href="{{ route('admin.faqs.index') }}" @if (request()->routeIs('admin.faqs.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.faqs.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>FAQ</a>
                         <a href="{{ route('admin.videos.index') }}" @if (request()->routeIs('admin.videos.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.videos.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>Video</a>
+                        <a href="{{ route('admin.topics.index') }}" @if (request()->routeIs('admin.topics.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.topics.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-faq" aria-hidden="true"></span>Topik</a>
                         <a href="{{ route('admin.profile.edit') }}" @if (request()->routeIs('admin.profile.*')) aria-current="page" @endif class="flex min-h-12 items-center gap-3 rounded-xl px-4 font-medium text-hospital-deep focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hospital {{ request()->routeIs('admin.profile.*') ? 'bg-sage' : 'hover:bg-sage' }}"><span class="admin-icon admin-icon-profile" aria-hidden="true"></span>Profil</a>
                         <form action="{{ route('admin.logout') }}" method="POST" class="border-t border-[#D8E6EF] pt-2 sm:hidden">
                             @csrf
